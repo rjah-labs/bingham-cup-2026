@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bingham Cup 2026 — Brisbane Hustlers</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0d0d0d;
+    --green: #1a5c2a;
+    --green-light: #2d8c45;
+    --green-dim: #0f3a1a;
+    --amber-light: #f5a623;
+    --surface: #161616;
+    --surface2: #1e1e1e;
+    --border: rgba(255,255,255,0.08);
+    --text: #e8e4dc;
+    --text-dim: #8a8680;
+    --text-muted: #5a5652;
+    --white: #f5f2ed;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--black); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+  .hero { background: var(--green-dim); border-bottom: 1px solid var(--green); padding: 3rem 2rem 2.5rem; text-align: center; }
+  .eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: var(--green-light); text-transform: uppercase; margin-bottom: 12px; }
+  .title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 10vw, 96px); line-height: 1; color: var(--white); letter-spacing: 0.02em; }
+  .subtitle { font-size: 15px; color: var(--text-dim); margin-top: 10px; line-height: 1.6; }
+  .chips { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+  .chip { font-family: 'DM Mono', monospace; font-size: 10px; padding: 4px 12px; border: 1px solid var(--green); border-radius: 2px; color: var(--green-light); letter-spacing: 0.08em; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; padding: 2.5rem 2rem; max-width: 900px; margin: 0 auto; width: 100%; flex: 1; }
+  .card { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; text-decoration: none; color: inherit; transition: border-color 0.2s, transform 0.15s; display: flex; flex-direction: column; }
+  .card:hover { border-color: var(--green); transform: translateY(-2px); }
+  .card-top { background: var(--green-dim); border-bottom: 1px solid var(--green); padding: 1.5rem; }
+  .card-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: var(--green-light); text-transform: uppercase; margin-bottom: 6px; }
+  .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 0.04em; color: var(--white); line-height: 1; }
+  .card-body { padding: 1.25rem; flex: 1; }
+  .card-desc { font-size: 13px; color: var(--text-dim); line-height: 1.7; margin-bottom: 1rem; }
+  .card-features { list-style: none; }
+  .card-feature { font-size: 12px; color: var(--text-muted); padding: 5px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .card-feature:last-child { border-bottom: none; }
+  .card-feature::before { content: ""; display: block; width: 4px; height: 4px; border-radius: 50%; background: var(--green-light); flex-shrink: 0; }
+  .card-footer { padding: 1rem 1.25rem; border-top: 1px solid var(--border); }
+  .card-btn { display: block; text-align: center; padding: 10px; background: var(--green-dim); border: 1px solid var(--green); border-radius: 3px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: var(--green-light); text-transform: uppercase; transition: background 0.15s; }
+  .card:hover .card-btn { background: var(--green); color: var(--white); }
+  .footer { text-align: center; padding: 1.5rem; border-top: 1px solid var(--border); }
+  .footer p { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 0.08em; }
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="eyebrow">Brisbane Hustlers · BH · Rob · Tight Head Lock</div>
+  <div class="title">Bingham Cup<br>2026</div>
+  <div class="subtitle">10-week solo prep plan · Training, nutrition, and supplements</div>
+  <div class="chips">
+    <span class="chip">186cm+ · 100kg+</span>
+    <span class="chip">6 days/week</span>
+    <span class="chip">August 2026</span>
+    <span class="chip">All sessions solo</span>
+  </div>
+</div>
+
+<div class="cards">
+  <a class="card" href="training.html">
+    <div class="card-top">
+      <div class="card-label">10-week program</div>
+      <div class="card-title">Training Plan</div>
+    </div>
+    <div class="card-body">
+      <p class="card-desc">Day-by-day training across three phases — Build, Convert, and Peak — with every session designed for solo work.</p>
+      <ul class="card-features">
+        <li class="card-feature">Phase 1 — Build (Weeks 1-4)</li>
+        <li class="card-feature">Phase 2 — Convert (Weeks 5-8)</li>
+        <li class="card-feature">Phase 3 — Peak and taper (Weeks 9-10)</li>
+        <li class="card-feature">Solo lineout drills every Tuesday and Saturday</li>
+        <li class="card-feature">Scrum simulation, carries, sprint conditioning</li>
+        <li class="card-feature">Coaching notes for every session</li>
+      </ul>
+    </div>
+    <div class="card-footer">
+      <span class="card-btn">Open training plan</span>
+    </div>
+  </a>
+
+  <a class="card" href="meals.html">
+    <div class="card-top">
+      <div class="card-label">Nutrition program</div>
+      <div class="card-title">Meal Plan</div>
+    </div>
+    <div class="card-body">
+      <p class="card-desc">Dex-timed eating for maximum calories and protein with minimal prep. Training days, field days, rest days, and game day protocols.</p>
+      <ul class="card-features">
+        <li class="card-feature">3,400 kcal target · 220g protein daily</li>
+        <li class="card-feature">Meals timed around dexamphetamine window</li>
+        <li class="card-feature">All meals under 5 min to prepare</li>
+        <li class="card-feature">Supplement schedule — 10g creatine split dose</li>
+        <li class="card-feature">Weekly grocery list — $180-220 est.</li>
+        <li class="card-feature">Sunday meal prep guide — 60 min setup</li>
+      </ul>
+    </div>
+    <div class="card-footer">
+      <span class="card-btn">Open meal plan</span>
+    </div>
+  </a>
+</div>
+
+<div class="footer">
+  <p>Brisbane Hustlers · Bingham Cup 2026 · Built for Rob · rjah-labs.github.io</p>
+</div>
+</body>
+</html>
