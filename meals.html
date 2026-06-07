@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bingham Cup 2026 — Meal Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0d0d0d;
+    --white: #f5f2ed;
+    --green: #1a5c2a;
+    --green-light: #2d8c45;
+    --green-dim: #0f3a1a;
+    --amber: #d4880a;
+    --amber-light: #f5a623;
+    --surface: #161616;
+    --surface2: #1e1e1e;
+    --surface3: #252525;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #e8e4dc;
+    --text-dim: #8a8680;
+    --text-muted: #5a5652;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--black); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+
+  .header { background: var(--green-dim); border-bottom: 1px solid var(--green); padding: 2rem; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 1rem; }
+  .header-eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: var(--green-light); text-transform: uppercase; margin-bottom: 6px; }
+  .header-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 5vw, 56px); line-height: 1; color: var(--white); letter-spacing: 0.02em; }
+  .header-sub { font-size: 13px; color: var(--text-dim); margin-top: 6px; }
+  .header-stats { display: flex; flex-direction: column; gap: 8px; text-align: right; }
+  .stat-chip { font-family: 'DM Mono', monospace; font-size: 11px; padding: 4px 10px; border: 1px solid var(--green); border-radius: 2px; color: var(--green-light); white-space: nowrap; }
+
+  .tabs { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn { flex: 1; min-width: 120px; padding: 14px 16px; background: none; border: none; border-bottom: 3px solid transparent; cursor: pointer; color: var(--text-dim); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; transition: all 0.2s; white-space: nowrap; }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active { border-bottom-color: var(--green-light); color: var(--white); background: var(--surface2); }
+
+  .panel { display: none; padding: 2rem; }
+  .panel.active { display: block; }
+
+  .dex-banner { background: rgba(212,136,10,0.08); border: 1px solid rgba(212,136,10,0.25); border-left: 4px solid var(--amber); border-radius: 4px; padding: 1rem 1.25rem; margin-bottom: 2rem; }
+  .dex-banner-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber-light); margin-bottom: 6px; }
+  .dex-banner p { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+
+  .macro-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 2rem; }
+  .macro-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 1rem; text-align: center; }
+  .macro-val { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 0.03em; line-height: 1; }
+  .macro-lbl { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+  .macro-val.cal { color: var(--amber-light); }
+  .macro-val.pro { color: #5b9bd5; }
+  .macro-val.carb { color: var(--green-light); }
+  .macro-val.fat { color: var(--text-dim); }
+
+  .day-type-tabs { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .dtype-btn { padding: 7px 16px; border-radius: 2px; border: 1px solid var(--border2); background: var(--surface2); color: var(--text-dim); font-size: 12px; font-family: 'DM Mono', monospace; letter-spacing: 0.06em; cursor: pointer; transition: all 0.15s; }
+  .dtype-btn:hover { color: var(--text); border-color: var(--green); }
+  .dtype-btn.active { background: var(--green-dim); border-color: var(--green); color: var(--green-light); }
+
+  .timeline { display: flex; flex-direction: column; gap: 12px; }
+  .meal-row { display: grid; grid-template-columns: 110px 1fr; gap: 0; position: relative; }
+  .meal-time-col { padding: 0 16px 0 0; position: relative; }
+  .meal-time { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); padding-top: 2px; white-space: nowrap; }
+  .meal-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); position: absolute; right: -4px; top: 8px; z-index: 2; }
+  .meal-dot.dex { background: var(--amber); }
+  .meal-dot.key { background: #5b9bd5; }
+  .meal-line { position: absolute; right: -1px; top: 16px; bottom: -12px; width: 2px; background: var(--border); }
+  .meal-row:last-child .meal-line { display: none; }
+
+  .meal-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 1rem 1.25rem; margin-left: 12px; transition: border-color 0.15s; }
+  .meal-card:hover { border-color: var(--border2); }
+  .meal-card.key-meal { border-color: rgba(26,74,122,0.4); }
+  .meal-card.dex-meal { border-color: rgba(212,136,10,0.3); }
+  .meal-card.supp-only { border-color: rgba(255,255,255,0.06); opacity: 0.85; }
+
+  .meal-tag-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  .meal-badge { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 2px; }
+  .badge-key { background: rgba(26,74,122,0.25); color: #5b9bd5; border: 1px solid rgba(26,74,122,0.4); }
+  .badge-dex { background: rgba(212,136,10,0.15); color: var(--amber-light); border: 1px solid rgba(212,136,10,0.3); }
+  .badge-supp { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border); }
+  .badge-liquid { background: rgba(45,140,69,0.12); color: var(--green-light); border: 1px solid rgba(45,140,69,0.25); }
+  .badge-post { background: rgba(192,57,43,0.15); color: #e74c3c; border: 1px solid rgba(192,57,43,0.3); }
+
+  .meal-name { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .meal-items { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+  .meal-items strong { color: var(--text); font-weight: 500; }
+  .meal-macros { display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+  .mpill { font-family: 'DM Mono', monospace; font-size: 10px; padding: 2px 7px; border-radius: 2px; }
+  .mp-p { background: rgba(26,74,122,0.2); color: #5b9bd5; }
+  .mp-c { background: rgba(45,140,69,0.15); color: var(--green-light); }
+  .mp-f { background: rgba(255,255,255,0.05); color: var(--text-muted); }
+  .mp-cal { background: rgba(212,136,10,0.15); color: var(--amber-light); }
+  .prep-note { margin-top: 8px; font-size: 11px; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 8px; }
+  .prep-note span { color: var(--green-light); font-weight: 500; }
+
+  .section-head { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 0.04em; margin-bottom: 1rem; margin-top: 0; }
+
+  .grocery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 2rem; }
+  .grocery-cat { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 1rem; }
+  .grocery-cat-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green-light); margin-bottom: 10px; }
+  .grocery-item { font-size: 13px; color: var(--text-dim); padding: 4px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .grocery-item:last-child { border-bottom: none; }
+  .grocery-item::before { content: ""; display: block; width: 5px; height: 5px; border-radius: 50%; background: var(--surface3); border: 1px solid var(--border2); flex-shrink: 0; }
+
+  .supp-timeline { display: flex; flex-direction: column; gap: 10px; }
+  .supp-row { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 1rem 1.25rem; display: grid; grid-template-columns: 120px 1fr auto; gap: 12px; align-items: center; }
+  .supp-time { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); }
+  .supp-detail { font-size: 13px; color: var(--text-dim); }
+  .supp-detail strong { color: var(--text); font-weight: 500; }
+  .supp-dose { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--amber-light); white-space: nowrap; }
+
+  .note-box { border-left: 3px solid var(--green); padding: 10px 14px; margin: 1rem 0 1.5rem; border-radius: 0 4px 4px 0; background: rgba(45,140,69,0.06); }
+  .note-box p { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+
+  .toolbar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 1.5rem; }
+  .btn { padding: 8px 16px; border-radius: 3px; font-size: 12px; font-family: 'DM Mono', monospace; letter-spacing: 0.06em; cursor: pointer; transition: all 0.15s; border: 1px solid var(--border2); background: var(--surface3); color: var(--text-dim); }
+  .btn:hover { color: var(--text); border-color: var(--green); }
+  .btn-primary { background: var(--green-dim); border-color: var(--green); color: var(--green-light); }
+  .btn-primary:hover { background: var(--green); color: var(--white); }
+
+  @media (max-width: 600px) {
+    .macro-bar { grid-template-columns: repeat(2, 1fr); }
+    .header { grid-template-columns: 1fr; }
+    .header-stats { flex-direction: row; flex-wrap: wrap; text-align: left; }
+    .meal-row { grid-template-columns: 80px 1fr; }
+    .supp-row { grid-template-columns: 1fr; }
+  }
+  @media print {
+    .tabs, .toolbar, .day-type-tabs { display: none; }
+    .panel { display: block !important; padding: 0; }
+    body { background: white; color: black; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-eyebrow">Brisbane Hustlers · Nutrition · 10-Week Prep</div>
+    <div class="header-title">Bingham Cup 2026<br>Meal Plan</div>
+    <div class="header-sub">Rob · Quick prep · No restrictions · $150-250/week · Dex-timed eating</div>
+  </div>
+  <div class="header-stats">
+    <span class="stat-chip">3,400 KCAL TARGET</span>
+    <span class="stat-chip">220g PROTEIN DAILY</span>
+    <span class="stat-chip">CREATINE 10g SPLIT DOSE</span>
+    <span class="stat-chip">3-4L WATER DAILY</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('daily', this)">Daily meals</button>
+  <button class="tab-btn" onclick="showTab('supps', this)">Supplements</button>
+  <button class="tab-btn" onclick="showTab('grocery', this)">Grocery list</button>
+  <button class="tab-btn" onclick="showTab('prep', this)">Meal prep guide</button>
+</div>
+
+<!-- DAILY MEALS -->
+<div class="panel active" id="tab-daily">
+  <div class="toolbar">
+    <button class="btn btn-primary" onclick="window.print()">Print plan</button>
+  </div>
+
+  <div class="dex-banner">
+    <div class="dex-banner-title">Dexamphetamine eating strategy</div>
+    <p>Your dex suppresses appetite from roughly 30-60 min after taking it until mid-afternoon. The strategy is simple: front-load calories before the drug kicks in, use liquid meals when you have zero appetite, and capitalise on your appetite returning in the evening. The pre-dex breakfast and the evening meals are your two most important calorie windows. Never skip the morning meal.</p>
+  </div>
+
+  <div class="macro-bar">
+    <div class="macro-card"><div class="macro-val cal">3,400</div><div class="macro-lbl">Calories</div></div>
+    <div class="macro-card"><div class="macro-val pro">220g</div><div class="macro-lbl">Protein</div></div>
+    <div class="macro-card"><div class="macro-val carb">380g</div><div class="macro-lbl">Carbs</div></div>
+    <div class="macro-card"><div class="macro-val fat">100g</div><div class="macro-lbl">Fat</div></div>
+  </div>
+
+  <div class="day-type-tabs">
+    <button class="dtype-btn active" onclick="showDayType('training', this)">Training day</button>
+    <button class="dtype-btn" onclick="showDayType('field', this)">Field day</button>
+    <button class="dtype-btn" onclick="showDayType('rest', this)">Rest day</button>
+    <button class="dtype-btn" onclick="showDayType('game', this)">Game day</button>
+  </div>
+
+  <div id="meal-timeline"></div>
+</div>
+
+<!-- SUPPLEMENTS -->
+<div class="panel" id="tab-supps">
+  <div class="section-head">Daily supplement schedule</div>
+  <div class="note-box">
+    <p>Creatine is updated to 10g per day based on your body mass — split into two 5g doses for best absorption. At 100kg+ this dose is well supported by current research. Dex and creatine both increase water demand — 3 to 4 litres minimum daily. All over-the-counter supplements only. Prescribed medications (testosterone, dexamphetamine) are managed through your doctor — not listed here.</p>
+  </div>
+  <div class="supp-timeline" id="supp-timeline"></div>
+</div>
+
+<!-- GROCERY LIST -->
+<div class="panel" id="tab-grocery">
+  <div class="section-head">Weekly grocery list</div>
+  <div class="note-box">
+    <p>This list covers a full week of eating to target. Buy in bulk where possible — chicken breast, eggs, oats, rice, and protein powder are your weekly staples. Estimated weekly cost: $180-220 including supplements.</p>
+  </div>
+  <div class="grocery-grid" id="grocery-grid"></div>
+</div>
+
+<!-- MEAL PREP -->
+<div class="panel" id="tab-prep">
+  <div class="section-head">Sunday meal prep — 60 minutes</div>
+  <div class="note-box">
+    <p>One Sunday prep session sets up most of your weekday eating. The goal is that on any given morning or evening you can assemble a full meal in under 5 minutes. Everything listed is designed around that principle.</p>
+  </div>
+  <div id="prep-content"></div>
+</div>
+
+<script>
+var mealData = {
+  training: [
+    {
+      time: "5:30-6:30am",
+      dotType: "key",
+      badge: "KEY MEAL",
+      badgeClass: "badge-key",
+      cardClass: "key-meal",
+      name: "Pre-dex power breakfast",
+      items: "<strong>4 whole eggs scrambled</strong> (microwave 2 min in a bowl) + 2 slices toast + <strong>1 cup oats</strong> with banana sliced in + drizzle of honey + glass of full-fat milk or OJ. Eat as much as you can — this is your biggest calorie window.",
+      macros: [{v:"55g",c:"mp-p",l:"protein"},{v:"110g",c:"mp-c",l:"carbs"},{v:"25g",c:"mp-f",l:"fat"},{v:"900",c:"mp-cal",l:"kcal"}],
+      prep: "Prep time: 3 min. Microwave eggs in a bowl (2 min), toast bread, pour oats with milk, slice banana. That is it."
+    },
+    {
+      time: "7:00am",
+      dotType: "supp",
+      badge: "SUPPLEMENTS",
+      badgeClass: "badge-supp",
+      cardClass: "supp-only",
+      name: "Morning supps",
+      items: "<strong>Creatine 5g</strong> in a glass of water + <strong>Vitamin D3 4000IU</strong> + <strong>Omega-3 fish oil 2 caps</strong> + Zinc 25mg. Take with your dex at your normal time.",
+      macros: [],
+      prep: "Pre-measure creatine into a small container the night before."
+    },
+    {
+      time: "9:30-10:00am",
+      dotType: "dex",
+      badge: "DEX WINDOW",
+      badgeClass: "badge-dex",
+      cardClass: "dex-meal",
+      name: "Mass shake — drink even if not hungry",
+      items: "<strong>2 scoops whey protein</strong> + 250ml full-fat milk + <strong>1 banana</strong> + 2 tbsp peanut butter + 1 tbsp oats + 1 tbsp honey. Blend or shake well. Drink slowly over 20 min.",
+      macros: [{v:"60g",c:"mp-p",l:"protein"},{v:"75g",c:"mp-c",l:"carbs"},{v:"20g",c:"mp-f",l:"fat"},{v:"720",c:"mp-cal",l:"kcal"}],
+      prep: "Prep time: 2 min. Pre-portion dry oats in a zip bag. Add everything to blender bottle and shake. No blender needed."
+    },
+    {
+      time: "12:30-1:00pm",
+      dotType: "key",
+      badge: "PRE-TRAINING",
+      badgeClass: "badge-key",
+      cardClass: "key-meal",
+      name: "Pre-training lunch",
+      items: "<strong>200g pre-cooked chicken breast</strong> (from Sunday prep) + <strong>1.5 cups cooked rice</strong> (microwave 90 sec pouch) + handful of baby spinach or frozen veg (microwave 2 min). Add soy sauce or hot sauce.",
+      macros: [{v:"55g",c:"mp-p",l:"protein"},{v:"85g",c:"mp-c",l:"carbs"},{v:"8g",c:"mp-f",l:"fat"},{v:"650",c:"mp-cal",l:"kcal"}],
+      prep: "Prep time: 4 min total. Microwave rice pouch, nuke frozen veg, slice pre-cooked chicken. Done."
+    },
+    {
+      time: "Within 30 min post-training",
+      dotType: "key",
+      badge: "POST-TRAINING",
+      badgeClass: "badge-post",
+      cardClass: "key-meal",
+      name: "Recovery shake",
+      items: "<strong>1-2 scoops whey protein</strong> in 350ml water or milk + piece of fruit (banana, apple, or sports drink for fast carbs). Get this in immediately — your recovery window is prime real estate.",
+      macros: [{v:"40g",c:"mp-p",l:"protein"},{v:"40g",c:"mp-c",l:"carbs"},{v:"3g",c:"mp-f",l:"fat"},{v:"350",c:"mp-cal",l:"kcal"}],
+      prep: "Keep a shaker and a protein scoop in your gym bag always."
+    },
+    {
+      time: "Post-training",
+      dotType: "supp",
+      badge: "SUPPLEMENTS",
+      badgeClass: "badge-supp",
+      cardClass: "supp-only",
+      name: "Post-training supps",
+      items: "<strong>Creatine 5g</strong> second dose — take with your post-training shake. This is your second daily creatine dose.",
+      macros: [],
+      prep: "Pre-portion into a small zip bag in your gym bag."
+    },
+    {
+      time: "6:30-7:00pm",
+      dotType: "key",
+      badge: "KEY MEAL",
+      badgeClass: "badge-key",
+      cardClass: "key-meal",
+      name: "Big dinner — appetite is back",
+      items: "<strong>250g beef mince or steak</strong> (pan 8-10 min) or <strong>200g salmon fillets</strong> (pan 6 min each side) + large serve of <strong>microwaved sweet potato or rice</strong> + frozen veg (microwave 3 min). Season generously. This is your second big calorie window.",
+      macros: [{v:"55g",c:"mp-p",l:"protein"},{v:"80g",c:"mp-c",l:"carbs"},{v:"28g",c:"mp-f",l:"fat"},{v:"790",c:"mp-cal",l:"kcal"}],
+      prep: "Prep time: 12 min. Fastest protein: beef mince in a pan — no chopping, no prep, high protein. Add packet sauce if you want."
+    },
+    {
+      time: "8:30-9:00pm",
+      dotType: "supp",
+      badge: "SUPPLEMENTS",
+      badgeClass: "badge-supp",
+      cardClass: "supp-only",
+      name: "Evening supps",
+      items: "<strong>Magnesium glycinate 400mg</strong> — sleep and recovery. Take 30-60 min before bed.",
+      macros: [],
+      prep: ""
+    },
+    {
+      time: "9:00-9:30pm",
+      dotType: "normal",
+      badge: "SLOW PROTEIN",
+      badgeClass: "badge-liquid",
+      cardClass: "",
+      name: "Pre-bed snack",
+      items: "<strong>1 cup full-fat Greek yoghurt</strong> + handful of berries + drizzle of honey. Or: <strong>cottage cheese on 4 rice crackers</strong>. Casein-rich foods feed muscle protein synthesis overnight.",
+      macros: [{v:"25g",c:"mp-p",l:"protein"},{v:"30g",c:"mp-c",l:"carbs"},{v:"8g",c:"mp-f",l:"fat"},{v:"280",c:"mp-cal",l:"kcal"}],
+      prep: "Prep time: 1 min. Keep Greek yoghurt stocked always."
+    }
+  ],
+  field: [
+    {
+      time: "5:30-6:30am",
+      dotType: "key",
+      badge: "KEY MEAL",
+      badgeClass: "badge-key",
+      cardClass: "key-meal",
+      name: "Pre-dex power breakfast",
+      items: "<strong>4 whole eggs scrambled</strong> + 2 slices toast + <strong>1 cup oats</strong> with banana + honey + glass of full-fat milk. Eat everything — field days burn more energy than gym days.",
+      macros: [{v:"55g",c:"mp-p",l:"protein"},{v:"110g",c:"mp-c",l:"carbs"},{v:"25g",c:"mp-f",l:"fat"},{v:"900",c:"mp-cal",l:"kcal"}],
+      prep: "Microwave eggs 2 min, toast bread, done in under 4 min."
+    },
+    {
+      time: "7:00am",
+      dotType: "supp",
+      badge: "SUPPLEMENTS",
+      badgeClass: "badge-supp",
+      cardClass: "supp-only",
+      name: "Morning supps",
+      items: "<strong>Creatine 5g</strong> + Vitamin D3 + Omega-3 + Zinc with your dex.",
+      macros: [],
+      prep: ""
+    },
+    {
+      time: "9:30-10:00am",
+      dotType: "dex",
+      badge: "DEX WINDOW",
+      badgeClass: "badge-dex",
+      cardClass: "dex-meal",
+      name: "Mass shake",
+      items: "<strong>2 scoops whey</strong> + full-fat milk + banana + peanut butter + oats + honey. Drink it regardless of hunger — field sessions need the fuel.",
+      macros: [{v:"60g",c:"mp-p",l:"protein"},{v:"75g",c:"mp-c",l:"carbs"},{v:"20g",c:"mp-f",l:"fat"},{v:"720",c:"mp-cal",l:"kcal"}],
+      prep: "Pre-mix dry ingredients into a zip bag the night before."
+    },
+    {
+      time: "12:00-12:30pm",
+      dotType: "key",
+      badge: "PRE-FIELD",
+      badgeClass: "badge-key",
+      cardClass: "key-meal",
+      name: "Higher carb pre-field lunch",
+      items: "<strong>200g chicken breast</strong> + <strong>2 cups cooked rice or pasta</strong> + small drizzle olive oil + soy sauce. Go heavier on carbs than a normal gym day — field sessions deplete glycogen faster.",
+      macros: [{v:"52g",c:"mp-p",l:"protein"},{v:"110g",c:"mp-c",l:"carbs"},{v:"10g",c:"mp-f",l:"fat"},{v:"740",c:"mp-cal",l:"kcal"}],
+      prep: "Microwave rice pouch, slice pre-cooked chicken, 4 min."
+    },
+    {
+      time: "During field session",
+      dotType: "dex",
+      badge: "DURING SESSION",
+      badgeClass: "badge-dex",
+      cardClass: "dex-meal",
+      name: "Hydration + fast fuel",
+      items: "Sip <strong>500ml sports drink (Powerade or Gatorade)</strong> during the session + carry a banana or 2-3 medjool dates as fast carbs if the session goes over 60 min. Do not train on water alone for field sessions.",
+      macros: [{v:"0g",c:"mp-p",l:"protein"},{v:"30g",c:"mp-c",l:"carbs"},{v:"0g",c:"mp-f",l:"fat"},{v:"120",c:"mp-cal",l:"kcal"}],
+      prep: "Bring a pre-filled drink bottle and a banana in your bag."
+    },
+    {
+      time: "Within 30 min post-field",
+      dotType: "key",
+      badge: "POST-FIELD",
+      badgeClass: "badge-post",
+      cardClass: "key-meal",
+      name: "Recovery shake — fast carbs + protein",
+      items: "<strong>2 scoops whey</strong> in 350ml milk + sports drink or banana. Field sessions deplete more glycogen than gym work — go higher on carbs here.",
+      macros: [{v:"50g",c:"mp-p",l:"protein"},{v:"60g",c:"mp-c",l:"carbs"},{v:"5g",c:"mp-f",l:"fat"},{v:"480",c:"mp-cal",l:"kcal"}],
+      prep: "Creatine second 5g dose goes in this shake too."
+    },
+    {
+      time: "6:30-7:00pm",
+      dotType: "key",
+      badge: "KEY MEAL",
+      badgeClass: "badge-key",
+      cardClass: "key-meal",
+      name: "Big recovery dinner",
+      items: "<strong>250g beef mince or 2 chicken thighs</strong> + large serve of sweet potato or pasta + frozen veg. Field days: eat more. Add extra rice or an extra serve of protein if still hungry.",
+      macros: [{v:"55g",c:"mp-p",l:"protein"},{v:"90g",c:"mp-c",l:"carbs"},{v:"28g",c:"mp-f",l:"fat"},{v:"830",c:"mp-cal",l:"kcal"}],
+      prep: "Prep time 12 min. Beef mince is fastest."
+    },
+    {
+      time: "9:00pm",
+      dotType: "normal",
+      badge: "SLOW PROTEIN",
+      badgeClass: "badge-liquid",
+      cardClass: "",
+      name: "Pre-bed snack + magnesium",
+      items: "<strong>Greek yoghurt</strong> + berries + honey. Take <strong>Magnesium glycinate 400mg</strong> with this.",
+      macros: [{v:"25g",c:"mp-p",l:"protein"},{v:"30g",c:"mp-c",l:"carbs"},{v:"8g",c:"mp-f",l:"fat"},{v:"280",c:"mp-cal",l:"kcal"}],
+      prep: ""
+    }
+  ],
+  rest: [
+    {
+      time: "6:30-7:30am",
+      dotType: "key",
+      badge: "KEY MEAL",
+      badgeClass: "badge-key",
+      cardClass: "key-meal",
+      name: "Pre-dex breakfast — slightly smaller",
+      items: "<strong>3-4 eggs scrambled</strong> + 2 slices toast + <strong>1 cup oats</strong> with banana. Still eat well — rest days are when your muscles rebuild. Slightly less than a training day is fine.",
+      macros: [{v:"50g",c:"mp-p",l:"protein"},{v:"100g",c:"mp-c",l:"carbs"},{v:"22g",c:"mp-f",l:"fat"},{v:"820",c:"mp-cal",l:"kcal"}],
+      prep: ""
+    },
+    {
+      time: "7:00am",
+      dotType: "supp",
+      badge: "SUPPLEMENTS",
+      badgeClass: "badge-supp",
+      cardClass: "supp-only",
+      name: "Morning supps",
+      items: "<strong>Creatine 5g</strong> + Vitamin D3 + Omega-3 + Zinc. Same as every morning.",
+      macros: [],
+      prep: ""
+    },
+    {
+      time: "9:30-10:00am",
+      dotType: "dex",
+      badge: "DEX WINDOW",
+      badgeClass: "badge-dex",
+      cardClass: "dex-meal",
+      name: "Mass shake — still required",
+      items: "<strong>2 scoops whey</strong> + milk + banana + peanut butter. Rest days still need protein — muscle repair does not stop on Sunday.",
+      macros: [{v:"55g",c:"mp-p",l:"protein"},{v:"65g",c:"mp-c",l:"carbs"},{v:"18g",c:"mp-f",l:"fat"},{v:"650",c:"mp-cal",l:"kcal"}],
+      prep: ""
+    },
+    {
+      time: "1:00-1:30pm",
+      dotType: "normal",
+      badge: "LUNCH",
+      badgeClass: "badge-liquid",
+      cardClass: "",
+      name: "Simple lunch",
+      items: "<strong>2 tins tuna or 150g chicken</strong> + 1 cup rice or 2 slices bread + baby spinach + olive oil and lemon. Light and quick.",
+      macros: [{v:"50g",c:"mp-p",l:"protein"},{v:"60g",c:"mp-c",l:"carbs"},{v:"10g",c:"mp-f",l:"fat"},{v:"540",c:"mp-cal",l:"kcal"}],
+      prep: "Prep time: 3 min. Tinned tuna is your fastest rest-day protein."
+    },
+    {
+      time: "6:30pm",
+      dotType: "key",
+      badge: "DINNER",
+      badgeClass: "badge-key",
+      cardClass: "key-meal",
+      name: "Dinner",
+      items: "<strong>200-250g protein of choice</strong> (steak, mince, chicken, salmon) + potato, rice, or pasta + veg. Rest day dinner is slightly smaller than a training day but still substantial.",
+      macros: [{v:"50g",c:"mp-p",l:"protein"},{v:"70g",c:"mp-c",l:"carbs"},{v:"22g",c:"mp-f",l:"fat"},{v:"690",c:"mp-cal",l:"kcal"}],
+      prep: ""
+    },
+    {
+      time: "8:30pm",
+      dotType: "supp",
+      badge: "SUPPLEMENTS",
+      badgeClass: "badge-supp",
+      cardClass: "supp-only",
+      name: "Evening supps + second creatine",
+      items: "<strong>Creatine 5g</strong> (second dose) + <strong>Magnesium glycinate 400mg</strong>. Take together before bed.",
+      macros: [],
+      prep: ""
+    },
+    {
+      time: "9:00pm",
+      dotType: "normal",
+      badge: "SLOW PROTEIN",
+      badgeClass: "badge-liquid",
+      cardClass: "",
+      name: "Pre-bed snack",
+      items: "<strong>Greek yoghurt</strong> + berries. Sleep well — rest days are your biggest growth days.",
+      macros: [{v:"20g",c:"mp-p",l:"protein"},{v:"25g",c:"mp-c",l:"carbs"},{v:"5g",c:"mp-f",l:"fat"},{v:"230",c:"mp-cal",l:"kcal"}],
+      prep: ""
+    }
+  ],
+  game: [
+    {
+      time: "3 hours before kick-off",
+      dotType: "key",
+      badge: "KEY MEAL",
+      badgeClass: "badge-key",
+      cardClass: "key-meal",
+      name: "Pre-game main meal",
+      items: "<strong>200g chicken breast or lean beef</strong> + <strong>2 cups cooked pasta or rice</strong> + small amount of veg. High carb, moderate protein, low fat. Avoid anything heavy, greasy, or high fibre today.",
+      macros: [{v:"50g",c:"mp-p",l:"protein"},{v:"120g",c:"mp-c",l:"carbs"},{v:"8g",c:"mp-f",l:"fat"},{v:"760",c:"mp-cal",l:"kcal"}],
+      prep: "Cook night before. Microwave on game morning."
+    },
+    {
+      time: "90 min before kick-off",
+      dotType: "dex",
+      badge: "TOP UP",
+      badgeClass: "badge-dex",
+      cardClass: "dex-meal",
+      name: "Carb top-up",
+      items: "<strong>Banana + 2 rice cakes with honey</strong> or a <strong>sports bar</strong>. Easy to digest fast carbs. Do not eat anything heavy this close to kick-off.",
+      macros: [{v:"5g",c:"mp-p",l:"protein"},{v:"55g",c:"mp-c",l:"carbs"},{v:"2g",c:"mp-f",l:"fat"},{v:"250",c:"mp-cal",l:"kcal"}],
+      prep: ""
+    },
+    {
+      time: "30 min before",
+      dotType: "supp",
+      badge: "PRE-GAME SUPPS",
+      badgeClass: "badge-supp",
+      cardClass: "supp-only",
+      name: "Pre-game supplements",
+      items: "<strong>Creatine 5g</strong> in water. No caffeine pills unless training falls well outside your dex window — do not stack stimulants. Sip water consistently. Start the game hydrated, not thirsty.",
+      macros: [],
+      prep: ""
+    },
+    {
+      time: "Half time",
+      dotType: "dex",
+      badge: "HALF TIME",
+      badgeClass: "badge-dex",
+      cardClass: "dex-meal",
+      name: "Half time fuel",
+      items: "<strong>Sports drink 300-400ml</strong> + banana or orange slices. Quick simple carbs only. Get back into the game.",
+      macros: [{v:"2g",c:"mp-p",l:"protein"},{v:"50g",c:"mp-c",l:"carbs"},{v:"0g",c:"mp-f",l:"fat"},{v:"210",c:"mp-cal",l:"kcal"}],
+      prep: ""
+    },
+    {
+      time: "Within 30 min post-game",
+      dotType: "key",
+      badge: "RECOVERY",
+      badgeClass: "badge-post",
+      cardClass: "key-meal",
+      name: "Post-game recovery shake",
+      items: "<strong>2 scoops whey</strong> in milk + banana. Get this in before celebrating. Recovery starts immediately after the final whistle.",
+      macros: [{v:"50g",c:"mp-p",l:"protein"},{v:"50g",c:"mp-c",l:"carbs"},{v:"5g",c:"mp-f",l:"fat"},{v:"450",c:"mp-cal",l:"kcal"}],
+      prep: "Pack your shaker and protein in your kit bag."
+    },
+    {
+      time: "1-2 hours post-game",
+      dotType: "key",
+      badge: "POST-GAME MEAL",
+      badgeClass: "badge-key",
+      cardClass: "key-meal",
+      name: "Big post-game meal",
+      items: "<strong>300g beef, chicken, or mixed grill</strong> + large serve of potato, rice, or pasta + veg. This is the meal you have earned. Eat well. If the team is going out, eat something substantial first.",
+      macros: [{v:"65g",c:"mp-p",l:"protein"},{v:"100g",c:"mp-c",l:"carbs"},{v:"30g",c:"mp-f",l:"fat"},{v:"930",c:"mp-cal",l:"kcal"}],
+      prep: ""
+    },
+    {
+      time: "Before bed",
+      dotType: "supp",
+      badge: "RECOVERY SUPPS",
+      badgeClass: "badge-supp",
+      cardClass: "supp-only",
+      name: "Pre-bed recovery",
+      items: "<strong>Magnesium glycinate 400mg</strong> + <strong>Creatine 5g</strong> second dose + Greek yoghurt if still hungry. Hydrate well — you have sweated a lot today.",
+      macros: [],
+      prep: ""
+    }
+  ]
+};
+
+var suppData = [
+  {time:"7:00am — with dex", detail:"<strong>Creatine monohydrate 5g</strong> — first daily dose. Mix in a full glass of water. Take with your morning dex.", dose:"5g"},
+  {time:"7:00am — with dex", detail:"<strong>Vitamin D3 4,000 IU + K2 100mcg</strong> — take with a meal containing fat. Supports testosterone activity, bone density, and immune function.", dose:"4000 IU"},
+  {time:"7:00am — with dex", detail:"<strong>Omega-3 fish oil 3g EPA/DHA</strong> — usually 3 to 4 capsules. Reduces exercise-induced inflammation and joint soreness at 6 sessions per week.", dose:"3g EPA/DHA"},
+  {time:"7:00am — with dex", detail:"<strong>Zinc 25mg</strong> — take with food. Heavy training depletes zinc through sweat. Supports testosterone function. Do not exceed 40mg daily.", dose:"25mg"},
+  {time:"Post-training", detail:"<strong>Creatine monohydrate 5g</strong> — second daily dose. Add to your post-training shake. Splitting the dose improves absorption and reduces gut discomfort versus taking 10g at once.", dose:"5g"},
+  {time:"30 min before bed", detail:"<strong>Magnesium glycinate 300-400mg</strong> — glycinate form is gentlest on the gut. Supports sleep quality and muscle recovery. Particularly important for you as stimulants can deplete magnesium and disrupt sleep.", dose:"400mg"},
+  {time:"Pre-training (optional)", detail:"<strong>Caffeine 100-200mg</strong> — only use this if training falls well outside your dex window, for example an evening session. Do not take within 6 hours of your dex dose. Do not stack stimulants.", dose:"100-200mg"}
+];
+
+var groceryData = [
+  {
+    cat: "Protein staples",
+    items: ["Chicken breast — 1.5kg", "Beef mince 5% fat — 1kg", "Eggs — 2 dozen", "Greek yoghurt full-fat — 1kg tub", "Cottage cheese — 500g", "Tinned tuna in spring water — 6 tins", "Salmon fillets — 500g (optional)"]
+  },
+  {
+    cat: "Carb staples",
+    items: ["Oats — 1kg bag", "Basmati rice — 2kg bag", "Microwave rice pouches — 6 pack (for speed)", "Pasta — 1kg bag", "Sourdough or wholegrain bread — 2 loaves", "Sweet potato — 1kg", "Banana — bunch of 8-10"]
+  },
+  {
+    cat: "Fats and flavour",
+    items: ["Peanut butter — 1kg jar", "Olive oil — bottle", "Honey — jar", "Soy sauce — bottle", "Hot sauce or chilli", "Packet pasta and rice sauces (speed cooking)"]
+  },
+  {
+    cat: "Fruit and veg",
+    items: ["Mixed frozen veg — 1kg bag", "Baby spinach — 200g bag", "Mixed berries frozen — 500g", "Oranges and apples — 6 each", "Avocado — 3-4 (optional)"]
+  },
+  {
+    cat: "Dairy and drinks",
+    items: ["Full-fat milk — 3L", "Orange juice — 1L", "Sports drink (Powerade or Gatorade) — 6 bottles", "Sparkling water — optional for variety"]
+  },
+  {
+    cat: "Supplements to buy",
+    items: ["Whey protein powder — 2kg bag", "Creatine monohydrate — 500g bag", "Magnesium glycinate — 60 caps", "Omega-3 fish oil — 90 caps", "Vitamin D3 + K2 — 60 caps", "Zinc — 60 tabs"]
+  },
+  {
+    cat: "Quick fuel and snacks",
+    items: ["Rice cakes — 1 pack", "Medjool dates — 200g", "Protein bars — 4-6 (emergencies only)", "Muesli bars or oat bars — 4-6"]
+  }
+];
+
+var prepSteps = [
+  {title:"Cook chicken breast in bulk", time:"20 min", detail:"Season 1-1.5kg chicken breast with salt, pepper, and garlic powder. Bake at 200C for 20-22 min. Cool, slice, portion into containers. Lasts 4-5 days in the fridge. This is the backbone of your Monday to Thursday lunches."},
+  {title:"Cook a big pot of rice", time:"15 min", detail:"Cook 3 cups dry rice in a rice cooker or pot. Portion into containers. Pairs with everything. Keep in the fridge all week. Microwave rice pouches are backup for when you run out."},
+  {title:"Hard boil a batch of eggs", time:"10 min", detail:"Boil 6-8 eggs for 9-10 min. Cool and store unpeeled in the fridge for up to a week. Grab them for quick protein additions to any meal."},
+  {title:"Pre-portion shake bags", time:"5 min", detail:"Measure out 7 bags of dry shake ingredients — 2 scoops protein powder, 1 tbsp oats each. Seal and stack in the pantry. Each morning just grab a bag, add milk, peanut butter, honey, and a banana. 90 second shake."},
+  {title:"Pre-measure creatine doses", time:"5 min", detail:"Measure 14 x 5g doses of creatine into small zip bags or a weekly pill organiser (7 morning, 7 post-training). Removes any morning thinking from your routine."},
+  {title:"Wash and prep veg", time:"5 min", detail:"Rinse and bag baby spinach. Everything else (frozen veg, berries) is ready to go straight from the freezer. No chopping required during the week."}
+];
+
+function showTab(tab, btn) {
+  document.querySelectorAll(".panel").forEach(function(p) { p.classList.remove("active"); });
+  document.querySelectorAll(".tab-btn").forEach(function(b) { b.classList.remove("active"); });
+  document.getElementById("tab-" + tab).classList.add("active");
+  btn.classList.add("active");
+}
+
+function showDayType(type, btn) {
+  document.querySelectorAll(".dtype-btn").forEach(function(b) { b.classList.remove("active"); });
+  btn.classList.add("active");
+  renderMeals(type);
+}
+
+function renderMeals(type) {
+  var meals = mealData[type];
+  var html = '<div class="timeline">';
+  meals.forEach(function(meal) {
+    var dotClass = meal.dotType === "key" ? "key" : meal.dotType === "dex" ? "dex" : "";
+    html += '<div class="meal-row">';
+    html += '<div class="meal-time-col">';
+    html += '<div class="meal-time">' + meal.time + "</div>";
+    html += '<div class="meal-dot ' + dotClass + '"></div>';
+    html += '<div class="meal-line"></div>';
+    html += "</div>";
+    html += '<div class="meal-card ' + meal.cardClass + '">';
+    html += '<div class="meal-tag-row">';
+    html += '<span class="meal-badge ' + meal.badgeClass + '">' + meal.badge + "</span>";
+    html += "</div>";
+    html += '<div class="meal-name">' + meal.name + "</div>";
+    html += '<div class="meal-items">' + meal.items + "</div>";
+    if (meal.macros && meal.macros.length > 0) {
+      html += '<div class="meal-macros">';
+      meal.macros.forEach(function(m) {
+        html += '<span class="mpill ' + m.c + '">' + m.v + " " + m.l + "</span>";
+      });
+      html += "</div>";
+    }
+    if (meal.prep) {
+      html += '<div class="prep-note"><span>Prep:</span> ' + meal.prep + "</div>";
+    }
+    html += "</div></div>";
+  });
+  html += "</div>";
+  document.getElementById("meal-timeline").innerHTML = html;
+}
+
+function renderSupps() {
+  var html = "";
+  suppData.forEach(function(s) {
+    html += '<div class="supp-row">';
+    html += '<div class="supp-time">' + s.time + "</div>";
+    html += '<div class="supp-detail">' + s.detail + "</div>";
+    html += '<div class="supp-dose">' + s.dose + "</div>";
+    html += "</div>";
+  });
+  document.getElementById("supp-timeline").innerHTML = html;
+}
+
+function renderGrocery() {
+  var html = "";
+  groceryData.forEach(function(cat) {
+    html += '<div class="grocery-cat">';
+    html += '<div class="grocery-cat-title">' + cat.cat + "</div>";
+    cat.items.forEach(function(item) {
+      html += '<div class="grocery-item">' + item + "</div>";
+    });
+    html += "</div>";
+  });
+  document.getElementById("grocery-grid").innerHTML = html;
+}
+
+function renderPrep() {
+  var html = "";
+  prepSteps.forEach(function(step, i) {
+    html += '<div class="meal-card" style="margin-bottom:12px">';
+    html += '<div class="meal-tag-row"><span class="meal-badge badge-supp">STEP ' + (i + 1) + "</span>";
+    html += '<span class="meal-badge badge-dex">' + step.time + "</span></div>";
+    html += '<div class="meal-name">' + step.title + "</div>";
+    html += '<div class="meal-items" style="margin-top:6px">' + step.detail + "</div>";
+    html += "</div>";
+  });
+  document.getElementById("prep-content").innerHTML = html;
+}
+
+renderMeals("training");
+renderSupps();
+renderGrocery();
+renderPrep();
+</script>
+</body>
+</html>
