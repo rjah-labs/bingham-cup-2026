@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bingham Cup 2026 — 10-Week Solo Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0d0d0d;
+    --white: #f5f2ed;
+    --green: #1a5c2a;
+    --green-light: #2d8c45;
+    --green-dim: #0f3a1a;
+    --amber: #d4880a;
+    --amber-light: #f5a623;
+    --red: #c0392b;
+    --blue: #1a4a7a;
+    --blue-light: #2e6da4;
+    --surface: #161616;
+    --surface2: #1e1e1e;
+    --surface3: #252525;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #e8e4dc;
+    --text-dim: #8a8680;
+    --text-muted: #5a5652;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--black); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+  .header { background: var(--green-dim); border-bottom: 1px solid var(--green); padding: 2rem; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 1rem; }
+  .header-eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: var(--green-light); text-transform: uppercase; margin-bottom: 6px; }
+  .header-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 6vw, 64px); line-height: 1; color: var(--white); letter-spacing: 0.02em; }
+  .header-sub { font-size: 13px; color: var(--text-dim); margin-top: 6px; }
+  .header-stats { display: flex; flex-direction: column; gap: 8px; text-align: right; }
+  .stat-chip { font-family: 'DM Mono', monospace; font-size: 11px; padding: 4px 10px; border: 1px solid var(--green); border-radius: 2px; color: var(--green-light); white-space: nowrap; }
+  .phase-nav { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .phase-nav::-webkit-scrollbar { display: none; }
+  .phase-btn { flex: 1; min-width: 160px; padding: 16px 20px; background: none; border: none; border-bottom: 3px solid transparent; cursor: pointer; text-align: left; transition: all 0.2s; color: var(--text-dim); }
+  .phase-btn:hover { background: var(--surface2); color: var(--text); }
+  .phase-btn.active { border-bottom-color: var(--green-light); color: var(--white); background: var(--surface2); }
+  .phase-btn-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; display: block; margin-bottom: 2px; }
+  .phase-btn-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; display: block; letter-spacing: 0.04em; }
+  .phase-btn.active .phase-btn-label { color: var(--green-light); }
+  .main { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 180px); }
+  .week-sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 1rem 0; position: sticky; top: 0; height: calc(100vh - 180px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--surface3) transparent; }
+  .sidebar-section { padding: 8px 16px 4px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
+  .week-btn { display: block; width: 100%; padding: 10px 16px; background: none; border: none; border-left: 3px solid transparent; text-align: left; cursor: pointer; color: var(--text-dim); transition: all 0.15s; font-size: 13px; font-family: 'DM Sans', sans-serif; }
+  .week-btn:hover { background: var(--surface2); color: var(--text); }
+  .week-btn.active { border-left-color: var(--green-light); background: var(--surface2); color: var(--white); font-weight: 500; }
+  .week-btn-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 1px; }
+  .week-btn.active .week-btn-num { color: var(--green-light); }
+  .content { padding: 2rem; overflow-y: auto; }
+  .week-header { display: grid; grid-template-columns: 1fr auto; align-items: start; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+  .week-title { font-family: 'Bebas Neue', sans-serif; font-size: 42px; line-height: 1; letter-spacing: 0.03em; }
+  .week-focus { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+  .week-targets { display: flex; flex-direction: column; gap: 6px; text-align: right; }
+  .week-target-pill { font-family: 'DM Mono', monospace; font-size: 10px; padding: 3px 10px; border-radius: 2px; letter-spacing: 0.08em; }
+  .pill-green { background: rgba(45,140,69,0.15); color: var(--green-light); border: 1px solid rgba(45,140,69,0.3); }
+  .pill-amber { background: rgba(212,136,10,0.15); color: var(--amber-light); border: 1px solid rgba(212,136,10,0.3); }
+  .pill-red { background: rgba(192,57,43,0.15); color: #e74c3c; border: 1px solid rgba(192,57,43,0.3); }
+  .pill-blue { background: rgba(26,74,122,0.2); color: #5b9bd5; border: 1px solid rgba(26,74,122,0.3); }
+  .phase-summary { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .phase-summary-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.04em; margin-bottom: 8px; }
+  .phase-summary p { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+  .days-grid { display: flex; flex-direction: column; gap: 12px; }
+  .day-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: border-color 0.2s; }
+  .day-card:hover { border-color: var(--border2); }
+  .day-card.rest { opacity: 0.7; }
+  .day-header { display: grid; grid-template-columns: 100px 1fr auto; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; user-select: none; }
+  .day-name { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.05em; color: var(--text-dim); }
+  .day-session-title { font-size: 14px; font-weight: 500; color: var(--text); }
+  .day-tag { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 2px; white-space: nowrap; }
+  .tag-strength { background: rgba(26,74,122,0.25); color: #5b9bd5; border: 1px solid rgba(26,74,122,0.4); }
+  .tag-field { background: rgba(45,140,69,0.2); color: var(--green-light); border: 1px solid rgba(45,140,69,0.35); }
+  .tag-conditioning { background: rgba(212,136,10,0.2); color: var(--amber-light); border: 1px solid rgba(212,136,10,0.35); }
+  .tag-recovery { background: rgba(255,255,255,0.04); color: var(--text-muted); border: 1px solid var(--border); }
+  .day-body { border-top: 1px solid var(--border); padding: 16px; display: none; }
+  .day-body.open { display: block; }
+  .session-block { margin-bottom: 14px; }
+  .session-block:last-child { margin-bottom: 0; }
+  .session-block-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+  .exercise-list { list-style: none; }
+  .exercise-item { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: baseline; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .exercise-item:last-child { border-bottom: none; }
+  .exercise-name { color: var(--text); }
+  .exercise-scheme { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--amber-light); white-space: nowrap; }
+  .exercise-note { grid-column: 1 / -1; font-size: 11px; color: var(--text-muted); padding-bottom: 4px; line-height: 1.5; }
+  .nutrition-strip { margin-top: 14px; padding: 12px 14px; background: var(--surface3); border-radius: 3px; border-left: 3px solid var(--green); }
+  .nutrition-strip-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green-light); margin-bottom: 6px; }
+  .nutrition-strip p { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+  .coaching-note { margin-top: 10px; padding: 10px 14px; background: rgba(212,136,10,0.08); border-left: 3px solid var(--amber); border-radius: 3px; }
+  .coaching-note p { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+  .toolbar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 1rem; }
+  .btn { padding: 8px 16px; border-radius: 3px; font-size: 12px; font-family: 'DM Mono', monospace; letter-spacing: 0.06em; cursor: pointer; transition: all 0.15s; border: 1px solid var(--border2); background: var(--surface3); color: var(--text-dim); }
+  .btn:hover { color: var(--text); border-color: var(--green); }
+  .btn-primary { background: var(--green-dim); border-color: var(--green); color: var(--green-light); }
+  .btn-primary:hover { background: var(--green); color: var(--white); }
+  .chevron { width: 16px; height: 16px; color: var(--text-muted); transition: transform 0.2s; flex-shrink: 0; }
+  .chevron.open { transform: rotate(180deg); }
+  @media (max-width: 700px) {
+    .main { grid-template-columns: 1fr; }
+    .week-sidebar { display: none; }
+    .header { grid-template-columns: 1fr; }
+    .header-stats { text-align: left; flex-direction: row; flex-wrap: wrap; }
+    .week-header { grid-template-columns: 1fr; }
+    .week-targets { text-align: left; flex-direction: row; flex-wrap: wrap; }
+    .day-header { grid-template-columns: 80px 1fr; }
+    .day-tag { display: none; }
+  }
+  @media print {
+    .phase-nav, .week-sidebar, .toolbar { display: none; }
+    .main { grid-template-columns: 1fr; }
+    .content { padding: 0; }
+    .day-body { display: block !important; }
+    body { background: white; color: black; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-eyebrow">Brisbane Hustlers · Solo Training · Tight Head Lock</div>
+    <div class="header-title">Bingham Cup 2026<br>10-Week Solo Plan</div>
+    <div class="header-sub">Rob · 186cm+ · 100kg+ · 6 days/week · Full gym + field · All sessions solo</div>
+  </div>
+  <div class="header-stats">
+    <span class="stat-chip">TARGET +3-5kg LEAN MASS</span>
+    <span class="stat-chip">3,400 KCAL / 220g PROTEIN</span>
+    <span class="stat-chip">CREATINE 5g DAILY</span>
+    <span class="stat-chip">AUGUST 2026</span>
+  </div>
+</div>
+
+<div class="phase-nav">
+  <button class="phase-btn active" onclick="setPhase('build', this)">
+    <span class="phase-btn-label">Phase 1 · Weeks 1-4</span>
+    <span class="phase-btn-title">Build</span>
+  </button>
+  <button class="phase-btn" onclick="setPhase('convert', this)">
+    <span class="phase-btn-label">Phase 2 · Weeks 5-8</span>
+    <span class="phase-btn-title">Convert</span>
+  </button>
+  <button class="phase-btn" onclick="setPhase('peak', this)">
+    <span class="phase-btn-label">Phase 3 · Weeks 9-10</span>
+    <span class="phase-btn-title">Peak</span>
+  </button>
+</div>
+
+<div class="main">
+  <div class="week-sidebar" id="week-sidebar"></div>
+  <div class="content" id="content"></div>
+</div>
+
+<script>
+var phases = {
+  build: {
+    title: "Build",
+    weeks: "1-4",
+    weeksData: [
+      {
+        num: 1,
+        focus: "Establish rhythm — learn the structure",
+        targets: [{label:"Volume",type:"green"},{label:"Technique focus",type:"blue"}],
+        note: "Week 1 is about learning the routine, not going to failure. Leave 1-2 reps in the tank on every set. Your body is adapting to 6 sessions from 2 — be patient. Everything here is solo — no partner work, no pod, no assumptions.",
+        days: buildDays(1)
+      },
+      {
+        num: 2,
+        focus: "Add load — push into working weights",
+        targets: [{label:"Add 2.5-5kg to main lifts",type:"green"},{label:"Creatine saturating",type:"amber"}],
+        note: "If you hit all reps cleanly in Week 1, add weight. Creatine is building up — expect slight scale increase from water retention by end of week.",
+        days: buildDays(2)
+      },
+      {
+        num: 3,
+        focus: "Intensity up — approach near-max effort",
+        targets: [{label:"Push to RPE 8-9 on main lifts",type:"amber"},{label:"Creatine fully saturated",type:"green"}],
+        note: "Creatine is fully saturated by now. You should notice slightly better power output. Eat aggressively this week — this is a key growth week.",
+        days: buildDays(3)
+      },
+      {
+        num: 4,
+        focus: "Deload — recover and consolidate",
+        targets: [{label:"Reduce volume 40%",type:"blue"},{label:"Maintain intensity",type:"amber"}],
+        note: "Deload week. Reduce sets but keep the weight the same. This is where your body actually grows. Sleep extra if you can.",
+        days: buildDays(4)
+      }
+    ]
+  },
+  convert: {
+    title: "Convert",
+    weeks: "5-8",
+    weeksData: [
+      {
+        num: 5,
+        focus: "Shift to power — introduce explosive movements",
+        targets: [{label:"Heavier loads 85%+",type:"amber"},{label:"Explosive focus",type:"green"}],
+        note: "Strength built in Phase 1 now gets converted to rugby power. Loads go up, reps come down, explosive movements are introduced. Field sessions ramp up in intensity.",
+        days: convertDays(5)
+      },
+      {
+        num: 6,
+        focus: "Contact simulation — body conditioning for physicality",
+        targets: [{label:"Game-intensity field sessions",type:"red"},{label:"Repeat sprint capacity",type:"amber"}],
+        note: "This week is hard. Field sessions are at game intensity. You are doing contact simulation solo — bag work, wall drives, body position under fatigue. Eat more on field days.",
+        days: convertDays(6)
+      },
+      {
+        num: 7,
+        focus: "Peak load week — biggest training week of the program",
+        targets: [{label:"Max strength + power",type:"red"},{label:"High conditioning load",type:"amber"}],
+        note: "Week 7 is your hardest week. You should be sleeping 8+ hours and eating to target. This is where the gains are made — do not skip sessions.",
+        days: convertDays(7)
+      },
+      {
+        num: 8,
+        focus: "Mini-deload — recover before peak phase",
+        targets: [{label:"Volume -30%",type:"blue"},{label:"Sharpen movement quality",type:"green"}],
+        note: "Recovery week. Reduce training volume but keep quality high. Start mentally shifting toward game-mode.",
+        days: convertDays(8)
+      }
+    ]
+  },
+  peak: {
+    title: "Peak",
+    weeks: "9-10",
+    weeksData: [
+      {
+        num: 9,
+        focus: "Sharpen — reduce fatigue, maintain power",
+        targets: [{label:"Volume -40%",type:"blue"},{label:"Speed + sharpness",type:"green"}],
+        note: "You may feel flat or slightly weaker early this week — that is normal during a taper. Power should return by end of week. Do not panic and add extra volume.",
+        days: peakDays(9)
+      },
+      {
+        num: 10,
+        focus: "Tournament week — arrive fresh and ready",
+        targets: [{label:"Volume -60%",type:"blue"},{label:"Game-day ready",type:"red"}],
+        note: "Very light week. Movement only. Keep the nervous system sharp without adding fatigue. Carb-load slightly (extra rice and pasta) on days before games.",
+        days: peakDays(10)
+      }
+    ]
+  }
+};
+
+function buildDays(weekNum) {
+  var vol = weekNum === 4 ? " (deload — 3 sets only)" : "";
+  var sets = weekNum === 4 ? "3" : "5";
+  return [
+    {
+      day: "Monday",
+      title: "Lower body strength",
+      tag: "strength",
+      exercises: [
+        {name:"Back squat", scheme: sets + "x5", note:"Heavy. Rest 3 min between sets. Drive through heels, stay tall. Your primary scrum-power movement."},
+        {name:"Romanian deadlift", scheme:"4x8", note:"3 second eccentric on the way down. Hamstring and hip hinge focus."},
+        {name:"Leg press", scheme:"3x12" + vol, note:""},
+        {name:"Walking lunges (dumbbells)", scheme:"3x12 each leg", note:""},
+        {name:"Calf raises (leg press machine or standing)", scheme:"3x15", note:"Heavy and full range."},
+        {name:"Ab wheel rollout", scheme:"3x10", note:"Brace hard through the core. Do not let your lower back sag."}
+      ],
+      nutrition: "High carb day. Large meal 90 min before training. Post-training: shake plus banana within 30 min. Big dinner.",
+      coaching: "Focus on hip drive out of the bottom of the squat — this is your scrum power. Every rep, full depth, controlled descent."
+    },
+    {
+      day: "Tuesday",
+      title: "Solo lineout + aerobic base",
+      tag: "field",
+      exercises: [
+        {name:"Warm-up jog", scheme:"5 min easy", note:""},
+        {name:"Dynamic mobility", scheme:"10 min", note:"Hip circles, leg swings, thoracic rotations, ankle circles."},
+        {name:"Two-step lineout jump (wall target)", scheme:"4x10 reps", note:"Mark a tape target on a wall at your maximum catch height. Two-step gather: outside foot, inside foot, explode. Body tight and vertical, arms driving overhead. Track if you hit the mark consistently."},
+        {name:"Catch at full extension (ball against wall)", scheme:"3x15 reps", note:"Throw ball high against a solid wall and catch at full stretch. Fingers spread, body tight. This is your lineout catch skill work."},
+        {name:"Zone 2 run", scheme:"20 min", note:"Conversational pace. Aerobic base. Resist going harder — it should feel almost too easy."},
+        {name:"200m efforts", scheme:"4x200m at 75%", note:"90 sec rest. Controlled, not sprinting."},
+        {name:"Mobility cool-down", scheme:"10 min", note:""}
+      ],
+      nutrition: "Moderate carb day. Good breakfast before heading out. Bring water and a banana. Hydrate well.",
+      coaching: "The two-step jump is the most important solo lineout skill you can build. Do it every Tuesday and Saturday. After 10 weeks your jump will be faster and more consistent even without having practiced with lifters."
+    },
+    {
+      day: "Wednesday",
+      title: "Upper body push + pull",
+      tag: "strength",
+      exercises: [
+        {name:"Bench press", scheme: sets + "x5", note:"Heavy. Rest 3 min. Control the descent — 2 seconds down."},
+        {name:"Barbell bent-over row", scheme:"4x8", note:"Overhand grip. Pull to lower chest. This builds your lineout bind strength."},
+        {name:"Standing overhead press", scheme:"4x8", note:""},
+        {name:"Cable seated row", scheme:"3x12", note:""},
+        {name:"Dumbbell incline press", scheme:"3x12", note:""},
+        {name:"Face pulls", scheme:"3x15", note:"Rotator cuff health. Do not skip this — shoulder injuries end seasons."},
+        {name:"Farmer carry", scheme:"3x40m", note:"Heaviest dumbbells available. Grip and posture under load."}
+      ],
+      nutrition: "High protein day. Lean into your liquid shake in the morning. Large dinner with red meat.",
+      coaching: "Grip and lat strength are your lineout-specific assets as a lock. The bent-over row and farmer carry directly build the pulling strength you need in the air."
+    },
+    {
+      day: "Thursday",
+      title: "Conditioning + scrum simulation",
+      tag: "conditioning",
+      exercises: [
+        {name:"Warm-up", scheme:"5 min row or bike", note:""},
+        {name:"Circuit — 5 rounds", scheme:"", note:"Complete all movements back to back, then rest 60 sec."},
+        {name:"— Farmer carry", scheme:"40m heavy", note:""},
+        {name:"— Box jumps", scheme:"10 reps", note:"Land soft. Reset fully between reps."},
+        {name:"— Row or ski erg", scheme:"200m hard", note:"Sprint effort."},
+        {name:"— Rest", scheme:"60 sec", note:""},
+        {name:"Wall drive scrum simulation", scheme:"10x10 sec holds", note:"Find a solid wall or squat rack. Get into your bind width, low scrum stance. Drive into the wall hard for 10 sec, rest 15 sec. Stay low — hips below shoulders."},
+        {name:"Low stance isometric hold", scheme:"5x20 sec", note:"Same scrum body position — hold it against the wall without driving. Builds positional endurance."}
+      ],
+      nutrition: "This is a hard session. Eat well beforehand and get your shake in within 30 min post-session.",
+      coaching: "Wall scrum simulation is the best solo scrum tool available. Get as low as a real scrum — if your hips are level with your shoulders you are too high. Drive from the legs, not the back."
+    },
+    {
+      day: "Friday",
+      title: "Full body strength",
+      tag: "strength",
+      exercises: [
+        {name:"Conventional deadlift", scheme: sets + "x4", note:"Heaviest session of the week. Rest 3-4 min. Hip hinge, brace hard, drive the floor away."},
+        {name:"Weighted chin-ups", scheme:"4x6", note:"Add weight via belt or dumbbell between knees. Slow and controlled."},
+        {name:"Dumbbell Bulgarian split squat", scheme:"3x10 each", note:"Rear foot on bench. Single-leg balance and strength."},
+        {name:"Barbell hip thrust", scheme:"3x12", note:"Drive through heels. Full extension at the top."},
+        {name:"Plank", scheme:"3x45 sec", note:""},
+        {name:"Side plank", scheme:"2x30 sec each side", note:""}
+      ],
+      nutrition: "Big eating day — deadlifts burn fuel. Have a solid meal 2 hours before. Red meat for dinner.",
+      coaching: "The deadlift is the single most important exercise for a lock. Hip hinge mechanics, strong brace, leg drive. Build the weight carefully and consistently each week."
+    },
+    {
+      day: "Saturday",
+      title: "Solo field — skills + sprints",
+      tag: "field",
+      exercises: [
+        {name:"Warm-up", scheme:"10 min", note:"Progressive jog, dynamic stretching, activation."},
+        {name:"Two-step lineout jump (wall target)", scheme:"5x10 reps", note:"Same drill as Tuesday but more volume. Mark your tape target. Track consistency and height. Focus on the last 3 reps of each set being as good as the first."},
+        {name:"Hanging ball catch practice", scheme:"3x10", note:"Hang a ball in a bag or net from a crossbar, goalpost, or sturdy tree branch at your target catch height. Approach, two-step, jump, catch cleanly. Best solo lineout drill available."},
+        {name:"Lineout call walk-through", scheme:"10 min", note:"Stand at a pretend lineout. Walk through your calls, your positioning, your read of where you need to be. Do this mentally under fatigue — it builds automatic responses."},
+        {name:"Acceleration sprints", scheme:"8x40m", note:"Walk back to start — full recovery between each. Focus on first 10m drive."},
+        {name:"Shuttle runs", scheme:"3x 20-10-5m shuttle", note:"90 sec rest between. Simulates lineout movement and breakdown patterns."},
+        {name:"Cool-down stretch", scheme:"10 min", note:""}
+      ],
+      nutrition: "Saturday night dinner is your biggest meal of the week. Refuel and celebrate the work done.",
+      coaching: "Saturday field sessions build toward game-readiness. The hanging ball drill is your most game-realistic solo lineout work — if you can only set up one drill, make it this one."
+    },
+    {
+      day: "Sunday",
+      title: "Full rest",
+      tag: "recovery",
+      exercises: [
+        {name:"No structured training", scheme:"", note:""},
+        {name:"Walking (optional)", scheme:"20-30 min easy", note:"Fresh air and light movement only."},
+        {name:"Foam rolling or massage gun", scheme:"15 min", note:"Focus on quads, hamstrings, thoracic spine, calves."},
+        {name:"Sleep", scheme:"8-9 hours", note:"Your most important recovery tool. Non-negotiable."}
+      ],
+      nutrition: "Still eat to target on rest days — your muscles are rebuilding. Focus on whole foods, protein, and hydration.",
+      coaching: "Rest is not weakness. The adaptation happens here, not in the gym. Do not train through genuine fatigue."
+    }
+  ];
+}
+
+function convertDays(weekNum) {
+  var deload = weekNum === 8;
+  return [
+    {
+      day: "Monday",
+      title: "Lower body power",
+      tag: "strength",
+      exercises: [
+        {name:"Back squat", scheme: deload ? "3x3 at 80%" : "5x3 at 85%+", note:"Heavier than Phase 1. Fewer reps, more weight. Rest 3-4 min."},
+        {name:"Trap bar jump or box squat jump", scheme:"4x4", note:"If no trap bar, load a barbell lightly and explode upward on each rep. Triple extension — ankle, knee, hip. Explosive lineout jump power."},
+        {name:"Bulgarian split squat", scheme: deload ? "2x8 each" : "3x8 each", note:"Add weight from Phase 1."},
+        {name:"Nordic hamstring curl (using bench or lat pulldown anchor)", scheme:"3x6", note:"Anchor feet under a lat pulldown pad or bench. Lower yourself slowly — 4 sec down. Injury prevention for locks."},
+        {name:"Single-leg calf raise", scheme:"3x12 each", note:""}
+      ],
+      nutrition: "Highest carb day of the week. Pre-training meal is critical. Post-training shake immediately.",
+      coaching: "The trap bar jump teaches triple extension — the exact same movement as launching yourself up in a lineout. Think of it as your lineout jump with weight."
+    },
+    {
+      day: "Tuesday",
+      title: "Solo lineout + field conditioning",
+      tag: "field",
+      exercises: [
+        {name:"Warm-up and activation", scheme:"10 min", note:""},
+        {name:"Two-step lineout jump — loaded", scheme: deload ? "3x8 reps" : "5x10 reps", note:"Same wall target drill as Phase 1 but now wear a weighted vest (5-10kg) for half the sets. Remove vest for the last 2 sets — your unweighted jump will feel explosive by contrast."},
+        {name:"Hanging ball catch — full approach", scheme:"4x10", note:"Now add a 2-3 step approach before the two-step gather. Build realistic timing. Catch cleanly at peak height every rep."},
+        {name:"Lineout timing walk-throughs under fatigue", scheme:"10 min", note:"Do this after the sprints below — when you are tired. Call your lineout, move to your position, execute your jump timing. Game conditions start with a tired body."},
+        {name:"150m efforts", scheme: deload ? "4x150m at 80%" : "6x150m at 85%", note:"2 min rest between. This is your primary rugby fitness work — more game-realistic than shorter sprints."},
+        {name:"Cool-down", scheme:"10 min", note:""}
+      ],
+      nutrition: "Field sessions burn significant energy. Solid lunch before, large dinner after.",
+      coaching: "Adding a weighted vest to your jump drills is a form of resistance training for your lineout. When you remove it, your nervous system fires faster and the jump feels easier."
+    },
+    {
+      day: "Wednesday",
+      title: "Upper body power",
+      tag: "strength",
+      exercises: [
+        {name:"Bench press", scheme: deload ? "3x4 at 80%" : "4x4 at 85%+", note:"Heavier than Phase 1."},
+        {name:"Weighted pull-ups", scheme:"4x5", note:"Belt or dumbbell between knees. Controlled. This is your lineout pulling strength."},
+        {name:"Push press (barbell)", scheme:"4x5", note:"Leg drive into press. This is a power movement — not a strict press."},
+        {name:"Bent-over row", scheme:"4x6", note:"Heavy. Overhand grip."},
+        {name:"Band pull-aparts", scheme:"3x20", note:"Shoulder health. Use a resistance band."},
+        {name:"Rotator cuff circuit", scheme:"2 rounds", note:"External rotation, Y-T-W raises with light dumbbells. 10 reps each movement. Non-negotiable for shoulder health."}
+      ],
+      nutrition: "Protein priority day. 3 protein-heavy meals and 1-2 shakes.",
+      coaching: "Shoulder health is your biggest injury risk at these loads. The rotator cuff work is 10 minutes that protects you from months of injury."
+    },
+    {
+      day: "Thursday",
+      title: "Repeat sprint conditioning",
+      tag: "conditioning",
+      exercises: [
+        {name:"Warm-up", scheme:"10 min progressive jog", note:""},
+        {name:"30m sprint repeats", scheme: deload ? "6x30m" : "10x30m", note:"90 sec rest. Max effort every rep. Walk back each time. This is game-fitness work."},
+        {name:"Contact simulation — tackle bag solo work", scheme:"10 min", note:"If no bag: use a padded post, a heavy punching bag, or a foam roller wrapped in a mat. Drive into it repeatedly in a low body position. Focus on leg drive, not upper body."},
+        {name:"Battle ropes or tyre flip simulation", scheme:"4x60 sec", note:"Battle ropes if available. If not: rapid alternating dumbbell slams (light dumbbells, 5-10kg each)."},
+        {name:"Burpees", scheme:"4x10", note:"Full height jump at the top. Rest 90 sec between rounds."}
+      ],
+      nutrition: "Brutal session. Carbs before, shake immediately after.",
+      coaching: "Repeat sprint ability separates good locks from great ones. You need to win the ball in the 80th minute, not just the 1st. Every sprint matters."
+    },
+    {
+      day: "Friday",
+      title: "Full body strength + explosives",
+      tag: "strength",
+      exercises: [
+        {name:"Deadlift", scheme: deload ? "3x3 at 80%" : "4x3 heavy", note:"Approach your working max. Rest 4 min between sets."},
+        {name:"Box jumps (immediately after deadlift)", scheme:"4x5", note:"Post-activation potentiation — jumping after heavy lifting fires fast-twitch fibres. Do within 3 min of finishing your last deadlift set."},
+        {name:"Weighted dips", scheme:"3x8", note:"Add weight from Phase 1."},
+        {name:"Cable row", scheme:"3x10", note:""},
+        {name:"Medicine ball slam", scheme:"3x10", note:"Max effort. Full hip extension overhead, slam hard into floor."}
+      ],
+      nutrition: "Big fuel day. Deadlift is your highest CNS load — eat well.",
+      coaching: "The box jumps immediately after deadlifts is called post-activation potentiation (PAP). Your nervous system is primed from the heavy load and your jumps will be more powerful. Use it."
+    },
+    {
+      day: "Saturday",
+      title: "Solo field — game simulation",
+      tag: "field",
+      exercises: [
+        {name:"Warm-up", scheme:"10 min", note:"Progressive jog, dynamic stretching, activation."},
+        {name:"Lineout jump — max height sets", scheme:"5x8 reps", note:"This is your game-pace lineout work. Full two-step gather, full explosive jump, catch at max height. Rest 45 sec between sets. By Week 7 you should be hitting the tape target every rep."},
+        {name:"Hanging ball catch — game speed", scheme:"4x8", note:"Full approach, full speed, catch and hold. No slow reps. Game intensity."},
+        {name:"Scrum position isolation", scheme:"5x15 sec holds", note:"Into the wall. Low, hips below shoulders, spine neutral, full drive pressure. This is your contact simulation."},
+        {name:"Game-pace interval run", scheme:"6x50m at 90%", note:"Simulates kick-chase and breakdown sprinting. Walk 30 sec between."},
+        {name:"Multi-directional movement", scheme:"10 min", note:"Lateral shuffles, back-pedal, forward sprint transitions. Simulates lineout movement patterns and loose play movement."},
+        {name:"Cool-down and stretch", scheme:"15 min", note:""}
+      ],
+      nutrition: "Game-day nutrition protocol practice. Large breakfast, snack 90 min before, shake within 30 min after, big dinner.",
+      coaching: "By Week 6-7 these Saturday sessions should feel like playing. You are building a game body — strong, conditioned, and technically sharp even when tired."
+    },
+    {
+      day: "Sunday",
+      title: "Active recovery",
+      tag: "recovery",
+      exercises: [
+        {name:"Pool swim or gentle walk", scheme:"20-30 min", note:"Easy effort only. Move the blood without loading the body."},
+        {name:"Foam rolling", scheme:"20 min", note:"Focus on what is sore from the week — quads, hamstrings, thoracic spine."},
+        {name:"Contrast shower (optional)", scheme:"2 min hot then 30 sec cold — 3 rounds", note:"Accelerates muscle recovery. Finish on cold."},
+        {name:"Sleep", scheme:"8+ hours", note:""}
+      ],
+      nutrition: "Still eat to target. Recovery day does not mean a cheat day.",
+      coaching: "Light Sunday movement clears lactic acid and reduces Monday soreness. A 20 min walk does more than sitting on the couch all day."
+    }
+  ];
+}
+
+function peakDays(weekNum) {
+  var isWeek10 = weekNum === 10;
+  return [
+    {
+      day: "Monday",
+      title: "Speed strength — lower",
+      tag: "strength",
+      exercises: [
+        {name:"Back squat", scheme: isWeek10 ? "3x3 at 75% fast" : "4x3 at 85% fast", note:"Bar speed is the focus. Same weight but move it as fast as possible on the way up."},
+        {name:"Trap bar jump or box squat jump", scheme: isWeek10 ? "2x3" : "3x3", note:"Explosive. Warm up well."},
+        {name:"Hip thrust", scheme: isWeek10 ? "2x8" : "3x8", note:"Moderate weight, fast drive at the top."}
+      ],
+      nutrition: "Carb-load slightly this week. Extra serving of rice or pasta at meals.",
+      coaching: "Volume is cut significantly. You are sharpening, not building. Trust the work you have done and do not add extra sets."
+    },
+    {
+      day: "Tuesday",
+      title: "Solo lineout — sharpness session",
+      tag: "field",
+      exercises: [
+        {name:"Lineout jump — quality sets", scheme: isWeek10 ? "3x8 reps" : "4x10 reps", note:"Full two-step gather, maximum height, clean catch. Tape target on wall. Every rep should be textbook — this is about consistency under tournament conditions."},
+        {name:"Hanging ball catch — sharp and fast", scheme: isWeek10 ? "3x8" : "4x10", note:"Full speed approach. No slow reps this week. Game intensity."},
+        {name:"Lineout call walk-throughs", scheme:"10 min", note:"Walk through every call in your repertoire. Your positioning, your read, your timing. Visualise the hooker, visualise the lifters, visualise the ball."},
+        {name:"Acceleration sprints", scheme: isWeek10 ? "4x20m" : "6x20m", note:"First-step explosiveness. Full recovery between each."},
+        {name:"Agility ladder (if available)", scheme:"10 min", note:"Foot speed and coordination. If no ladder, do lateral shuffle patterns on marked lines."},
+        {name:"Stretch", scheme:"10 min", note:""}
+      ],
+      nutrition: "Pre-session meal important. Keep hydration high all week.",
+      coaching: "This week the lineout work is about confidence and consistency, not height records. You want every rep to feel automatic."
+    },
+    {
+      day: "Wednesday",
+      title: "Upper body maintenance",
+      tag: "strength",
+      exercises: [
+        {name:"Bench press", scheme: isWeek10 ? "2x4 at 75%" : "3x4 at 80%", note:"Maintain strength. Do not push for personal records this week."},
+        {name:"Weighted pull-ups", scheme: isWeek10 ? "2x5" : "3x5", note:""},
+        {name:"Barbell row", scheme: isWeek10 ? "2x6" : "3x6", note:""},
+        {name:"Face pulls", scheme:"2x15", note:""},
+        {name:"Rotator cuff maintenance", scheme:"10 min", note:"Y-T-W raises, external rotation. Shoulder health to the end."}
+      ],
+      nutrition: "Normal eating. Do not under-eat because sessions are shorter.",
+      coaching: "In and out in 45 minutes. Save the energy for the field. Three movements, maintain strength, go home."
+    },
+    {
+      day: "Thursday",
+      title: "Low intensity conditioning",
+      tag: "conditioning",
+      exercises: [
+        {name:"Stationary bike or row (zone 2)", scheme:"20 min", note:"Easy effort. Conversational pace. Keep the engine ticking."},
+        {name:"Mobility flow", scheme:"15 min", note:"Hip flexors, thoracic spine, hamstrings, ankles. Focus on areas that feel tight."},
+        {name:"Foam rolling", scheme:"10 min", note:""}
+      ],
+      nutrition: "Lighter day — focus on quality food and hydration over quantity.",
+      coaching: "This is maintenance and mental prep. Light movement keeps you sharp without adding fatigue. Use the time to visualise your game."
+    },
+    {
+      day: "Friday",
+      title: "Game prep — light movement only",
+      tag: "field",
+      exercises: [
+        {name:"Light jog and activation", scheme:"10 min", note:""},
+        {name:"Two-step lineout jump — feel work", scheme:"3x8 reps", note:"No tape pressure. Just get your body remembering the movement. Loose, bouncy, explosive. Feel good."},
+        {name:"Passing and catching practice", scheme:"15 min", note:"Throw ball against a wall and catch cleanly. Sharp hands. Catch everything."},
+        {name:"Lineout walk-through and visualisation", scheme:"10 min", note:"Close your eyes after. See yourself in the lineout. The call comes in, you move, you jump, you catch. Perfect execution in your mind."},
+        {name:"Gentle stretch", scheme:"10 min", note:""}
+      ],
+      nutrition: "Pre-match nutrition protocol begins tonight. Large carb dinner. Pasta, rice, bread. Light on fat and fibre.",
+      coaching: "No heavy lifting within 48 hours of games. The work is done. Arrive confident."
+    },
+    {
+      day: "Saturday",
+      title: "Rest or very light movement",
+      tag: "recovery",
+      exercises: [
+        {name:"Walk", scheme:"20 min easy", note:""},
+        {name:"Pool (optional)", scheme:"15 min easy", note:""},
+        {name:"Light stretch", scheme:"10 min", note:""}
+      ],
+      nutrition: "Carb-focused meals all day. Pasta, rice, bread. Stay hydrated. Avoid alcohol.",
+      coaching: "You have done 10 weeks of work. Trust it. Your job today is to stay loose, eat well, and sleep."
+    },
+    {
+      day: "Sunday",
+      title: "Full rest",
+      tag: "recovery",
+      exercises: [
+        {name:"No training", scheme:"", note:""},
+        {name:"Sleep", scheme:"8-9 hours", note:""},
+        {name:"Be with your teammates", scheme:"", note:"Rugby is about the people beside you. Bingham Cup is a celebration of that. You have done the work."}
+      ],
+      nutrition: "Keep carbs up. Hydrate consistently. You are peaking — protect it.",
+      coaching: "Go be a lock."
+    }
+  ];
+}
+
+var currentPhase = "build";
+var currentWeek = 1;
+
+function setPhase(phase, btn) {
+  currentPhase = phase;
+  currentWeek = phases[phase].weeksData[0].num;
+  document.querySelectorAll(".phase-btn").forEach(function(b) { b.classList.remove("active"); });
+  btn.classList.add("active");
+  renderSidebar();
+  renderContent();
+}
+
+function setWeek(weekNum) {
+  currentWeek = weekNum;
+  renderSidebar();
+  renderContent();
+}
+
+function renderSidebar() {
+  var phaseData = phases[currentPhase];
+  var phaseNum = currentPhase === "build" ? "1" : currentPhase === "convert" ? "2" : "3";
+  var html = '<div class="sidebar-section">Phase ' + phaseNum + " \u00b7 " + phaseData.title + "</div>";
+  phaseData.weeksData.forEach(function(w) {
+    html += '<button class="week-btn ' + (w.num === currentWeek ? "active" : "") + '" onclick="setWeek(' + w.num + ')">';
+    html += '<span class="week-btn-num">WEEK ' + w.num + "</span>";
+    html += w.focus;
+    html += "</button>";
+  });
+  document.getElementById("week-sidebar").innerHTML = html;
+}
+
+function renderContent() {
+  var phaseData = phases[currentPhase];
+  var weekData = null;
+  for (var i = 0; i < phaseData.weeksData.length; i++) {
+    if (phaseData.weeksData[i].num === currentWeek) { weekData = phaseData.weeksData[i]; break; }
+  }
+  if (!weekData) return;
+
+  var tagMap = {strength:"tag-strength", field:"tag-field", conditioning:"tag-conditioning", recovery:"tag-recovery"};
+  var tagLabel = {strength:"GYM", field:"FIELD", conditioning:"CONDITIONING", recovery:"REST"};
+
+  var pillColors = {green:"pill-green", amber:"pill-amber", red:"pill-red", blue:"pill-blue"};
+
+  var html = '<div class="toolbar">';
+  html += '<button class="btn" onclick="expandAll()">Expand all</button>';
+  html += '<button class="btn" onclick="collapseAll()">Collapse all</button>';
+  html += '<button class="btn btn-primary" onclick="window.print()">Print week</button>';
+  html += "</div>";
+
+  html += '<div class="week-header">';
+  html += '<div><div class="week-title">Week ' + weekData.num + "</div>";
+  html += '<div class="week-focus">' + weekData.focus + "</div></div>";
+  html += '<div class="week-targets">';
+  weekData.targets.forEach(function(t) {
+    html += '<span class="week-target-pill ' + pillColors[t.type] + '">' + t.label + "</span>";
+  });
+  html += "</div></div>";
+
+  html += '<div class="phase-summary"><div class="phase-summary-title">Week focus</div><p>' + weekData.note + "</p></div>";
+
+  html += '<div class="days-grid">';
+  weekData.days.forEach(function(day, i) {
+    var isRest = day.tag === "recovery";
+    html += '<div class="day-card ' + (isRest ? "rest" : "") + '" id="card-' + i + '">';
+    html += '<div class="day-header" onclick="toggleDay(' + i + ')">';
+    html += '<div class="day-name">' + day.day + "</div>";
+    html += '<div class="day-session-title">' + day.title + "</div>";
+    html += '<div style="display:flex;align-items:center;gap:8px">';
+    html += '<span class="day-tag ' + tagMap[day.tag] + '">' + tagLabel[day.tag] + "</span>";
+    html += '<svg class="chevron" id="chev-' + i + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+    html += "</div></div>";
+
+    html += '<div class="day-body" id="body-' + i + '">';
+    html += '<div class="session-block"><div class="session-block-title">Session plan</div><ul class="exercise-list">';
+    day.exercises.forEach(function(ex) {
+      html += '<li class="exercise-item">';
+      html += '<span class="exercise-name">' + ex.name + "</span>";
+      html += '<span class="exercise-scheme">' + ex.scheme + "</span>";
+      if (ex.note) { html += '<span class="exercise-note">' + ex.note + "</span>"; }
+      html += "</li>";
+    });
+    html += "</ul></div>";
+
+    if (day.nutrition) {
+      html += '<div class="nutrition-strip"><div class="nutrition-strip-title">Nutrition focus</div><p>' + day.nutrition + "</p></div>";
+    }
+    if (day.coaching) {
+      html += '<div class="coaching-note"><p><strong>Coach note:</strong> ' + day.coaching + "</p></div>";
+    }
+    html += "</div></div>";
+  });
+  html += "</div>";
+  document.getElementById("content").innerHTML = html;
+}
+
+function toggleDay(i) {
+  document.getElementById("body-" + i).classList.toggle("open");
+  document.getElementById("chev-" + i).classList.toggle("open");
+}
+
+function expandAll() {
+  document.querySelectorAll(".day-body").forEach(function(b) { b.classList.add("open"); });
+  document.querySelectorAll(".chevron").forEach(function(c) { c.classList.add("open"); });
+}
+
+function collapseAll() {
+  document.querySelectorAll(".day-body").forEach(function(b) { b.classList.remove("open"); });
+  document.querySelectorAll(".chevron").forEach(function(c) { c.classList.remove("open"); });
+}
+
+renderSidebar();
+renderContent();
+</script>
+</body>
+</html>
