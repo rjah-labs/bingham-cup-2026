@@ -7,33 +7,33 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --black: #0d0d0d;
-    --white: #f5f2ed;
-    --green: #1a5c2a;
-    --green-light: #2d8c45;
-    --green-dim: #0f3a1a;
-    --amber: #d4880a;
-    --amber-light: #f5a623;
-    --red: #c0392b;
-    --blue: #1a4a7a;
-    --blue-light: #2e6da4;
-    --surface: #161616;
-    --surface2: #1e1e1e;
-    --surface3: #252525;
-    --border: rgba(255,255,255,0.08);
-    --border2: rgba(255,255,255,0.14);
-    --text: #e8e4dc;
-    --text-dim: #8a8680;
-    --text-muted: #5a5652;
+    --black: #0d1117;
+    --white: #e6edf3;
+    --green: #238636;
+    --green-light: #3fb950;
+    --green-dim: #1a2e1a;
+    --amber: #9e6a03;
+    --amber-light: #d29922;
+    --red: #da3633;
+    --blue: #1f6feb;
+    --blue-light: #58a6ff;
+    --surface: #161b22;
+    --surface2: #1c2128;
+    --surface3: #21262d;
+    --border: rgba(48,54,61,0.9);
+    --border2: rgba(65,72,81,0.9);
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --text-muted: #6e7681;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--black); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
-  .header { background: var(--green-dim); border-bottom: 1px solid var(--green); padding: 2rem; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 1rem; }
+  .header { background: var(--surface); border-bottom: 1px solid var(--green); padding: 2rem; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 1rem; }
   .header-eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: var(--green-light); text-transform: uppercase; margin-bottom: 6px; }
   .header-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 6vw, 64px); line-height: 1; color: var(--white); letter-spacing: 0.02em; }
   .header-sub { font-size: 13px; color: var(--text-dim); margin-top: 6px; }
   .header-stats { display: flex; flex-direction: column; gap: 8px; text-align: right; }
-  .stat-chip { font-family: 'DM Mono', monospace; font-size: 11px; padding: 4px 10px; border: 1px solid var(--green); border-radius: 2px; color: var(--green-light); white-space: nowrap; }
+  .stat-chip { font-family: 'DM Mono', monospace; font-size: 11px; padding: 4px 10px; border: 1px solid var(--green); border-radius: 4px; color: var(--green-light); white-space: nowrap; }
   .phase-nav { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
   .phase-nav::-webkit-scrollbar { display: none; }
   .phase-btn { flex: 1; min-width: 160px; padding: 16px 20px; background: none; border: none; border-bottom: 3px solid transparent; cursor: pointer; text-align: left; transition: all 0.2s; color: var(--text-dim); }
@@ -56,10 +56,10 @@
   .week-focus { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
   .week-targets { display: flex; flex-direction: column; gap: 6px; text-align: right; }
   .week-target-pill { font-family: 'DM Mono', monospace; font-size: 10px; padding: 3px 10px; border-radius: 2px; letter-spacing: 0.08em; }
-  .pill-green { background: rgba(45,140,69,0.15); color: var(--green-light); border: 1px solid rgba(45,140,69,0.3); }
-  .pill-amber { background: rgba(212,136,10,0.15); color: var(--amber-light); border: 1px solid rgba(212,136,10,0.3); }
-  .pill-red { background: rgba(192,57,43,0.15); color: #e74c3c; border: 1px solid rgba(192,57,43,0.3); }
-  .pill-blue { background: rgba(26,74,122,0.2); color: #5b9bd5; border: 1px solid rgba(26,74,122,0.3); }
+  .pill-green { background: rgba(63,185,80,0.15); color: var(--green-light); border: 1px solid rgba(63,185,80,0.25); }
+  .pill-amber { background: rgba(210,153,34,0.15); color: var(--amber-light); border: 1px solid rgba(210,153,34,0.3); }
+  .pill-red { background: rgba(218,54,51,0.15); color: #f85149; border: 1px solid rgba(218,54,51,0.3); }
+  .pill-blue { background: rgba(31,111,235,0.15); color: #58a6ff; border: 1px solid rgba(26,74,122,0.3); }
   .phase-summary { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; margin-bottom: 1.5rem; }
   .phase-summary-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.04em; margin-bottom: 8px; }
   .phase-summary p { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
@@ -71,9 +71,9 @@
   .day-name { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.05em; color: var(--text-dim); }
   .day-session-title { font-size: 14px; font-weight: 500; color: var(--text); }
   .day-tag { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 2px; white-space: nowrap; }
-  .tag-strength { background: rgba(26,74,122,0.25); color: #5b9bd5; border: 1px solid rgba(26,74,122,0.4); }
-  .tag-field { background: rgba(45,140,69,0.2); color: var(--green-light); border: 1px solid rgba(45,140,69,0.35); }
-  .tag-conditioning { background: rgba(212,136,10,0.2); color: var(--amber-light); border: 1px solid rgba(212,136,10,0.35); }
+  .tag-strength { background: rgba(31,111,235,0.2); color: #58a6ff; border: 1px solid rgba(31,111,235,0.4); }
+  .tag-field { background: rgba(63,185,80,0.2); color: var(--green-light); border: 1px solid rgba(63,185,80,0.3); }
+  .tag-conditioning { background: rgba(210,153,34,0.2); color: var(--amber-light); border: 1px solid rgba(210,153,34,0.3); }
   .tag-recovery { background: rgba(255,255,255,0.04); color: var(--text-muted); border: 1px solid var(--border); }
   .day-body { border-top: 1px solid var(--border); padding: 16px; display: none; }
   .day-body.open { display: block; }
@@ -89,7 +89,7 @@
   .nutrition-strip { margin-top: 14px; padding: 12px 14px; background: var(--surface3); border-radius: 3px; border-left: 3px solid var(--green); }
   .nutrition-strip-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green-light); margin-bottom: 6px; }
   .nutrition-strip p { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
-  .coaching-note { margin-top: 10px; padding: 10px 14px; background: rgba(212,136,10,0.08); border-left: 3px solid var(--amber); border-radius: 3px; }
+  .coaching-note { margin-top: 10px; padding: 10px 14px; background: rgba(210,153,34,0.08); border-left: 3px solid var(--amber); border-radius: 3px; }
   .coaching-note p { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
   .toolbar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 1rem; }
   .btn { padding: 8px 16px; border-radius: 3px; font-size: 12px; font-family: 'DM Mono', monospace; letter-spacing: 0.06em; cursor: pointer; transition: all 0.15s; border: 1px solid var(--border2); background: var(--surface3); color: var(--text-dim); }
