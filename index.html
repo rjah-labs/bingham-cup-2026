@@ -7,44 +7,56 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --black: #0d0d0d;
-    --green: #1a5c2a;
-    --green-light: #2d8c45;
-    --green-dim: #0f3a1a;
-    --amber-light: #f5a623;
-    --surface: #161616;
-    --surface2: #1e1e1e;
-    --border: rgba(255,255,255,0.08);
-    --text: #e8e4dc;
-    --text-dim: #8a8680;
-    --text-muted: #5a5652;
-    --white: #f5f2ed;
+    --black: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2128;
+    --surface3: #21262d;
+    --border: #30363d;
+    --border2: #444c56;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --text-muted: #6e7681;
+    --green: #238636;
+    --green-light: #3fb950;
+    --blue: #58a6ff;
+    --amber: #d29922;
+    --white: #e6edf3;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--black); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
-  .hero { background: var(--green-dim); border-bottom: 1px solid var(--green); padding: 3rem 2rem 2.5rem; text-align: center; }
-  .eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: var(--green-light); text-transform: uppercase; margin-bottom: 12px; }
+
+  .hero { background: var(--surface); border-bottom: 1px solid var(--border); padding: 3rem 2rem 2.5rem; text-align: center; }
+  .eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: var(--blue); text-transform: uppercase; margin-bottom: 12px; }
   .title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 10vw, 96px); line-height: 1; color: var(--white); letter-spacing: 0.02em; }
   .subtitle { font-size: 15px; color: var(--text-dim); margin-top: 10px; line-height: 1.6; }
   .chips { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
-  .chip { font-family: 'DM Mono', monospace; font-size: 10px; padding: 4px 12px; border: 1px solid var(--green); border-radius: 2px; color: var(--green-light); letter-spacing: 0.08em; }
+  .chip { font-family: 'DM Mono', monospace; font-size: 10px; padding: 4px 12px; border: 1px solid var(--border2); border-radius: 20px; color: var(--text-dim); letter-spacing: 0.06em; }
+  .chip.green { border-color: var(--green); color: var(--green-light); }
+
   .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; padding: 2.5rem 2rem; max-width: 900px; margin: 0 auto; width: 100%; flex: 1; }
-  .card { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; text-decoration: none; color: inherit; transition: border-color 0.2s, transform 0.15s; display: flex; flex-direction: column; }
-  .card:hover { border-color: var(--green); transform: translateY(-2px); }
-  .card-top { background: var(--green-dim); border-bottom: 1px solid var(--green); padding: 1.5rem; }
-  .card-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: var(--green-light); text-transform: uppercase; margin-bottom: 6px; }
-  .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 0.04em; color: var(--white); line-height: 1; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; text-decoration: none; color: inherit; transition: border-color 0.2s, transform 0.15s; display: flex; flex-direction: column; }
+  .card:hover { border-color: var(--blue); transform: translateY(-2px); }
+
+  .card-top { padding: 1.5rem; border-bottom: 1px solid var(--border); }
+  .card-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: var(--blue); text-transform: uppercase; margin-bottom: 8px; }
+  .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 34px; letter-spacing: 0.04em; color: var(--white); line-height: 1; }
+
   .card-body { padding: 1.25rem; flex: 1; }
   .card-desc { font-size: 13px; color: var(--text-dim); line-height: 1.7; margin-bottom: 1rem; }
   .card-features { list-style: none; }
   .card-feature { font-size: 12px; color: var(--text-muted); padding: 5px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
   .card-feature:last-child { border-bottom: none; }
   .card-feature::before { content: ""; display: block; width: 4px; height: 4px; border-radius: 50%; background: var(--green-light); flex-shrink: 0; }
+
   .card-footer { padding: 1rem 1.25rem; border-top: 1px solid var(--border); }
-  .card-btn { display: block; text-align: center; padding: 10px; background: var(--green-dim); border: 1px solid var(--green); border-radius: 3px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: var(--green-light); text-transform: uppercase; transition: background 0.15s; }
-  .card:hover .card-btn { background: var(--green); color: var(--white); }
+  .card-btn { display: block; text-align: center; padding: 10px; background: rgba(35,134,54,0.15); border: 1px solid var(--green); border-radius: 6px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: var(--green-light); text-transform: uppercase; transition: background 0.15s; }
+  .card:hover .card-btn { background: rgba(35,134,54,0.3); }
+
   .footer { text-align: center; padding: 1.5rem; border-top: 1px solid var(--border); }
   .footer p { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 0.08em; }
+  .footer a { color: var(--blue); text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -53,8 +65,8 @@
   <div class="title">Bingham Cup<br>2026</div>
   <div class="subtitle">10-week solo prep plan · Training, nutrition, and supplements</div>
   <div class="chips">
-    <span class="chip">186cm+ · 100kg+</span>
-    <span class="chip">6 days/week</span>
+    <span class="chip green">186cm+ · 100kg+</span>
+    <span class="chip green">6 days/week</span>
     <span class="chip">August 2026</span>
     <span class="chip">All sessions solo</span>
   </div>
@@ -105,7 +117,7 @@
 </div>
 
 <div class="footer">
-  <p>Brisbane Hustlers · Bingham Cup 2026 · Built for Rob · rjah-labs.github.io</p>
+  <p>Brisbane Hustlers · Bingham Cup 2026 · <a href="https://rjah-labs.github.io">rjah-labs.github.io</a></p>
 </div>
 </body>
 </html>
