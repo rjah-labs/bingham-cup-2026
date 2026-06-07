@@ -7,31 +7,31 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --black: #0d0d0d;
-    --white: #f5f2ed;
-    --green: #1a5c2a;
-    --green-light: #2d8c45;
-    --green-dim: #0f3a1a;
-    --amber: #d4880a;
-    --amber-light: #f5a623;
-    --surface: #161616;
-    --surface2: #1e1e1e;
-    --surface3: #252525;
-    --border: rgba(255,255,255,0.08);
-    --border2: rgba(255,255,255,0.14);
-    --text: #e8e4dc;
-    --text-dim: #8a8680;
-    --text-muted: #5a5652;
+    --black: #0d1117;
+    --white: #e6edf3;
+    --green: #238636;
+    --green-light: #3fb950;
+    --green-dim: #1a2e1a;
+    --amber: #9e6a03;
+    --amber-light: #d29922;
+    --surface: #161b22;
+    --surface2: #1c2128;
+    --surface3: #21262d;
+    --border: rgba(48,54,61,0.9);
+    --border2: rgba(65,72,81,0.9);
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --text-muted: #6e7681;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--black); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
 
-  .header { background: var(--green-dim); border-bottom: 1px solid var(--green); padding: 2rem; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 1rem; }
+  .header { background: var(--surface); border-bottom: 1px solid var(--green); padding: 2rem; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 1rem; }
   .header-eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: var(--green-light); text-transform: uppercase; margin-bottom: 6px; }
   .header-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 5vw, 56px); line-height: 1; color: var(--white); letter-spacing: 0.02em; }
   .header-sub { font-size: 13px; color: var(--text-dim); margin-top: 6px; }
   .header-stats { display: flex; flex-direction: column; gap: 8px; text-align: right; }
-  .stat-chip { font-family: 'DM Mono', monospace; font-size: 11px; padding: 4px 10px; border: 1px solid var(--green); border-radius: 2px; color: var(--green-light); white-space: nowrap; }
+  .stat-chip { font-family: 'DM Mono', monospace; font-size: 11px; padding: 4px 10px; border: 1px solid var(--green); border-radius: 4px; color: var(--green-light); white-space: nowrap; }
 
   .tabs { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
   .tabs::-webkit-scrollbar { display: none; }
@@ -42,7 +42,7 @@
   .panel { display: none; padding: 2rem; }
   .panel.active { display: block; }
 
-  .dex-banner { background: rgba(212,136,10,0.08); border: 1px solid rgba(212,136,10,0.25); border-left: 4px solid var(--amber); border-radius: 4px; padding: 1rem 1.25rem; margin-bottom: 2rem; }
+  .dex-banner { background: rgba(210,153,34,0.08); border: 1px solid rgba(212,136,10,0.25); border-left: 4px solid var(--amber); border-radius: 4px; padding: 1rem 1.25rem; margin-bottom: 2rem; }
   .dex-banner-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber-light); margin-bottom: 6px; }
   .dex-banner p { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
 
@@ -51,7 +51,7 @@
   .macro-val { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 0.03em; line-height: 1; }
   .macro-lbl { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
   .macro-val.cal { color: var(--amber-light); }
-  .macro-val.pro { color: #5b9bd5; }
+  .macro-val.pro { color: #58a6ff; }
   .macro-val.carb { color: var(--green-light); }
   .macro-val.fat { color: var(--text-dim); }
 
@@ -66,33 +66,33 @@
   .meal-time { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); padding-top: 2px; white-space: nowrap; }
   .meal-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); position: absolute; right: -4px; top: 8px; z-index: 2; }
   .meal-dot.dex { background: var(--amber); }
-  .meal-dot.key { background: #5b9bd5; }
+  .meal-dot.key { background: #58a6ff; }
   .meal-line { position: absolute; right: -1px; top: 16px; bottom: -12px; width: 2px; background: var(--border); }
   .meal-row:last-child .meal-line { display: none; }
 
   .meal-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 1rem 1.25rem; margin-left: 12px; transition: border-color 0.15s; }
   .meal-card:hover { border-color: var(--border2); }
-  .meal-card.key-meal { border-color: rgba(26,74,122,0.4); }
-  .meal-card.dex-meal { border-color: rgba(212,136,10,0.3); }
+  .meal-card.key-meal { border-color: rgba(31,111,235,0.4); }
+  .meal-card.dex-meal { border-color: rgba(210,153,34,0.3); }
   .meal-card.supp-only { border-color: rgba(255,255,255,0.06); opacity: 0.85; }
 
   .meal-tag-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
   .meal-badge { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 2px; }
-  .badge-key { background: rgba(26,74,122,0.25); color: #5b9bd5; border: 1px solid rgba(26,74,122,0.4); }
-  .badge-dex { background: rgba(212,136,10,0.15); color: var(--amber-light); border: 1px solid rgba(212,136,10,0.3); }
+  .badge-key { background: rgba(31,111,235,0.2); color: #58a6ff; border: 1px solid rgba(31,111,235,0.4); }
+  .badge-dex { background: rgba(210,153,34,0.15); color: var(--amber-light); border: 1px solid rgba(210,153,34,0.3); }
   .badge-supp { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border); }
-  .badge-liquid { background: rgba(45,140,69,0.12); color: var(--green-light); border: 1px solid rgba(45,140,69,0.25); }
-  .badge-post { background: rgba(192,57,43,0.15); color: #e74c3c; border: 1px solid rgba(192,57,43,0.3); }
+  .badge-liquid { background: rgba(63,185,80,0.12); color: var(--green-light); border: 1px solid rgba(63,185,80,0.2); }
+  .badge-post { background: rgba(218,54,51,0.15); color: #f85149; border: 1px solid rgba(218,54,51,0.3); }
 
   .meal-name { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
   .meal-items { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
   .meal-items strong { color: var(--text); font-weight: 500; }
   .meal-macros { display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
   .mpill { font-family: 'DM Mono', monospace; font-size: 10px; padding: 2px 7px; border-radius: 2px; }
-  .mp-p { background: rgba(26,74,122,0.2); color: #5b9bd5; }
-  .mp-c { background: rgba(45,140,69,0.15); color: var(--green-light); }
+  .mp-p { background: rgba(31,111,235,0.15); color: #58a6ff; }
+  .mp-c { background: rgba(63,185,80,0.15); color: var(--green-light); }
   .mp-f { background: rgba(255,255,255,0.05); color: var(--text-muted); }
-  .mp-cal { background: rgba(212,136,10,0.15); color: var(--amber-light); }
+  .mp-cal { background: rgba(210,153,34,0.15); color: var(--amber-light); }
   .prep-note { margin-top: 8px; font-size: 11px; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 8px; }
   .prep-note span { color: var(--green-light); font-weight: 500; }
 
@@ -112,7 +112,7 @@
   .supp-detail strong { color: var(--text); font-weight: 500; }
   .supp-dose { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--amber-light); white-space: nowrap; }
 
-  .note-box { border-left: 3px solid var(--green); padding: 10px 14px; margin: 1rem 0 1.5rem; border-radius: 0 4px 4px 0; background: rgba(45,140,69,0.06); }
+  .note-box { border-left: 3px solid var(--green); padding: 10px 14px; margin: 1rem 0 1.5rem; border-radius: 0 4px 4px 0; background: rgba(63,185,80,0.06); }
   .note-box p { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
 
   .toolbar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 1.5rem; }
