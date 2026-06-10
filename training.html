@@ -678,5 +678,42 @@ function collapseAll() {
 renderSidebar();
 renderContent();
 </script>
+
+<!-- PWA Back Button -->
+<style>
+  #pwa-back-btn {
+    position: fixed;
+    bottom: 24px;
+    left: 20px;
+    z-index: 9999;
+    background: #238636;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    display: none;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+  }
+  #pwa-back-btn:active { background: #2ea043; }
+</style>
+<button id="pwa-back-btn" onclick="history.back()">&#8592; Back</button>
+<script>
+  (function() {
+    var btn = document.getElementById('pwa-back-btn');
+    if (document.referrer && document.referrer.includes(location.hostname)) {
+      btn.style.display = 'flex';
+    }
+    window.addEventListener('popstate', function() {
+      btn.style.display = history.length > 1 ? 'flex' : 'none';
+    });
+  })();
+</script>
+
 </body>
 </html>
